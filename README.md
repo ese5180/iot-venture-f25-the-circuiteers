@@ -8,7 +8,7 @@
 |------------------|----------------------|
 | Kevin Wang       | wazhi@seas.upenn.edu |
 | Shun Yao         |shunyao@seas.upenn.edu|
-| [Name 3]         | [Email 3]            |
+| Zheyu Li         |lizheyu@seas.upenn.edu|
 | [Name 4]         | [Email 4]            |
 
 **GitHub Repository URL:** https://github.com/ese5180/iot-venture-f25-the-circuiteers.git
@@ -26,5 +26,6 @@
 ### Security Requirements Specification
 
 ### Hardware Requirements Specification
+
 
 ### Software Requirements Specification
