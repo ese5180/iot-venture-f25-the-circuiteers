@@ -2,16 +2,16 @@
 # IoT Venture Pitch
 ## ESE5180: IoT Wireless, Security, & Scaling
 
-**Team Name:** 
+**Team Name:** The Circuiteers
 
-| Team Member Name | Email Address       |
-|------------------|---------------------|
-| [Name 1]         | [Email 1]           |
-| [Name 2]         | [Email 2]           |
-| [Name 3]         | [Email 3]           |
-| [Name 4]         | [Email 4]           |
+| Team Member Name | Email Address        |
+|------------------|----------------------|
+| Kevin Wang       | wazhi@seas.upenn.edu |
+| [Name 2]         | [Email 2]            |
+| [Name 3]         | [Email 3]            |
+| [Name 4]         | [Email 4]            |
 
-**GitHub Repository URL:**
+**GitHub Repository URL:** https://github.com/ese5180/iot-venture-f25-the-circuiteers.git
 
 ## Concept Development
 
