@@ -7,7 +7,7 @@
 | Team Member Name | Email Address        |
 |------------------|----------------------|
 | Kevin Wang       | wazhi@seas.upenn.edu |
-| [Name 2]         | [Email 2]            |
+| Shun Yao         |shunyao@seas.upenn.edu|
 | [Name 3]         | [Email 3]            |
 | [Name 4]         | [Email 4]            |
 
