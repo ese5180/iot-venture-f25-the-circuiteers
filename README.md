@@ -4,12 +4,12 @@
 
 **Team Name:** The Circuiteers
 
-| Team Member Name | Email Address        |
-|------------------|----------------------|
-| Kevin Wang       | wazhi@seas.upenn.edu |
-| Shun Yao         |shunyao@seas.upenn.edu|
-| Zheyu Li         |lizheyu@seas.upenn.edu|
-| [Name 4]         | [Email 4]            |
+| Team Member Name | Email Address         |
+|------------------|-----------------------|
+| Kevin Wang       | wazhi@seas.upenn.edu  |
+| Shun Yao         |shunyao@seas.upenn.edu |
+| Zheyu Li         |lizheyu@seas.upenn.edu |
+| Megha Mistry     | megham@seas.upenn.edu |
 
 **GitHub Repository URL:** https://github.com/ese5180/iot-venture-f25-the-circuiteers.git
 
