@@ -18,7 +18,6 @@
 The vending machine industry represents a $22-25 billion global market [2] with a critical need for smart health monitoring systems, as traditional maintenance approaches are bleeding operators dry with hidden costs that eliminate profits for 73% of independent vending operators [1]. Current maintenance expenses range from $100-500 annually per machine, with monthly checks costing $50-100 and service incidents adding $50-200 each time, creating a maintenance burden that can constitute up to 15% of total operational costs [1]. By using sensors to monitor component health in real-time—such as power draw, temperature, and dispensing motor function—operators can preempt failures before they happen, a practice that can reduce maintenance costs by up to 25% over time. [3] Take a mid-sized vending operator with a fleet of 100 machines, the total annual maintenance contract cost would be $60,000 ($600/machine x 100 machines). A 25% reduction means an annual saving of $15,000. A health monitoring system prevents costly emergency repairs, optimizes service routes to eliminate unnecessary trips, and cuts product waste from overstocking or machine malfunctions. By transforming vending machines from static boxes into efficient, reliable, and more profitable assets, a smart health monitoring system provides a clear and rapid return on investment.
 
 
-
 Sources:
 1. https://dfyvending.com/vending-machine-maintenance-costs
 2. https://www.nextmsc.com/report/vending-machine-market
@@ -54,6 +53,9 @@ The product is a smart health monitoring system for vending machines that uses s
 
 #### Device Block Diagram
 
+![Device Block Diagram](images/Device_diagram.png)
+
+Source Code:
 ```mermaid
 graph TB
     subgraph "Power System"
@@ -100,6 +102,9 @@ graph TB
 
 #### Communication Architecture Diagram
 
+![Communication Architecture Diagram](images/Communication_diagram.png)
+
+Source Code:
 ```mermaid
 graph TB
     subgraph "Edge Layer - Vending Machines"
