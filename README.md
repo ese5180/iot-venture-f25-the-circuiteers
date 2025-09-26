@@ -139,11 +139,36 @@ graph TB
     DASH --> MOBILE
 ```
 
-
-
 ### Security Requirements Specification
+
+The vending machine health monitoring system requires robust security measures to protect operational data, prevent unauthorized access to machine controls, and ensure the integrity of maintenance predictions. Security is critical as compromised systems could lead to false maintenance alerts, data theft, or disruption of vending operations.
+
+**SEC 01** – All LoRaWAN communications shall use standard LoRaWAN 1.0.x security with unique device keys to prevent unauthorized devices from joining the network.
+
+**SEC 02** – The cloud API shall require authentication tokens for all data submissions to prevent unauthorized data injection.
+
+**SEC 03** – Firmware updates shall include checksums to verify integrity and prevent corrupted updates from bricking devices.
 
 ### Hardware Requirements Specification
 
+The hardware platform consists of distributed sensor nodes deployed in vending machines, communicating via LoRa to a central gateway. The system must operate reliably in commercial environments with varying temperatures and electrical noise while maintaining low power consumption for battery-backed operation.
+
+**HRS 01** – The system shall use Nordic nRF7002 DK as the primary microcontroller platform for both edge devices and central gateway, operating at 3.3V with integrated Wi-Fi/Bluetooth capabilities.
+
+**HRS 02** – Temperature monitoring shall use I2C-based digital temperature sensors with ±5°C accuracy across -10°C to +110°C range, sampling at 1Hz minimum.
+
+**HRS 03** – Vibration detection shall utilize a 3-axis MEMS accelerometer with 16-bit resolution to monitor motor health, sampling at 100Hz minimum.
+
+**HRS 04** – The SparkFun Pro RF LoRa module shall provide 915MHz communication with minimum -148dBm sensitivity and +20dBm transmit power for reliable in-building coverage.
 
 ### Software Requirements Specification
+
+The software system manages distributed sensor data collection, wireless transmission, edge processing, and predictive maintenance algorithms. Built on Zephyr RTOS, it ensures real-time performance while maintaining power efficiency for battery-operated edge nodes.
+
+**SRS 01** – The edge device firmware shall collect temperature, vibration, and power consumption data every 60 seconds (±5 seconds) and transmit via LoRaWAN to the central gateway.
+
+**SRS 02** – The system shall implement edge anomaly detection using a sliding window algorithm to identify temperature deviations or vibration patterns.
+
+**SRS 03** – The gateway shall aggregate data from the vending machine and forward processed metrics to the cloud platform via MQTT/HTTPS every 5 minutes.
+
+**SRS 04** – The software shall maintain a local data buffer capable of storing 24 hours of sensor readings in case of communication failure, with automatic retransmission upon connection restoration.
