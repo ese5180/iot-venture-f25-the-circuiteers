@@ -28,6 +28,9 @@ Sources:
 
 ### Product Function
 
+The product is a smart health monitoring system for vending machines that uses sensors to track critical components like temperature and motor vibration in real-time. It wirelessly transmits health data from distributed vending machines to a central processing system, enabling operators to monitor hundreds of machines simultaneously. The system provides predictive maintenance capabilities by identifying potential failures before they occur, helping vending operators reduce maintenance costs by up to 25% and prevent costly emergency repairs.
+
+
 ### Target Market & Demographics
 
 
@@ -42,11 +45,101 @@ Sources:
 - Competitors: While asset monitoring systems (Augury) and smart (with capabilities to track sales, suggest products to purchase, do inventory monitring etc.) vending machines  exist (BetterHealth Vending, SMRT1 Technologies, Velocity Smart), there appears to be a gap in the area of health monitoring systems specifically for vending machines.
 
 
-
-
 ### Stakeholders
 
+**Jeff Dreyer** serves as our key stakeholder and industry advisor for this vending machine health monitoring project. As Senior Director of Product Management and Enablement at Augmentir, Jeff brings over 10 years of experience in industrial IoT solutions and product development. His background spans from software engineering at ThingWorx (PTC) to his current role leading product enablement at Augmentir, where he focuses on connected worker solutions and industrial asset management. Jeff's expertise in IoT platforms, product strategy, and industrial automation makes him an invaluable advisor for developing our smart health monitoring system for vending machines. His insights will help ensure our solution aligns with industry best practices and market needs.
+
+
 ### System-Level Diagrams
+
+#### Device Block Diagram
+
+```mermaid
+graph TB
+    subgraph "Power System"
+        AC[AC Power Input] --> PSU[AC/DC Converter]
+        PSU --> PMIC[Power Management]
+        BAT[Battery Backup] --> PMIC
+    end
+    
+    subgraph "Core Processing"
+        EDGE[Nordic nRF7002 DK<br/>Edge Device<br/>LoRaWAN]
+        CENTRAL[Nordic nRF7002 DK<br/>Central Processor<br/>LoRaWAN]
+    end
+    
+    subgraph "Sensors"
+        TEMP[Temperature Sensor]
+        VIB[Vibration Sensor]
+        POWER[Power Monitor]
+    end
+    
+    subgraph "User Interface"
+        LED[Status Indicators]
+        BUZZER[Alert System]
+    end
+    
+    subgraph "Communication"
+        LORA[LoRa Module - SparkFun Pro RF]
+        GATE[LoRa Gateway]
+        ANT[LoRa Antenna]
+    end
+    
+    PMIC --> EDGE
+    PMIC --> CENTRAL
+    EDGE --> TEMP
+    EDGE --> VIB
+    EDGE --> POWER
+    EDGE --> LORA
+    CENTRAL --> LORA
+    LORA --> ANT
+    CENTRAL --> GATE
+    EDGE --> GATE
+    CENTRAL --> LED
+    CENTRAL --> BUZZER
+```
+
+#### Communication Architecture Diagram
+
+```mermaid
+graph TB
+    subgraph "Edge Layer - Vending Machines"
+        VM1[Vending Machine #1<br/>Temperature + Vibration Sensors + more]
+        VM2[Vending Machine #2<br/>Temperature + Vibration Sensors + more]
+        VM3[Vending Machine #N<br/>Temperature + Vibration Sensors + more]
+    end
+    
+    subgraph "Gateway Layer"
+        GW[LoRa Gateway<br/>nRF7002 DK<br/>Data Aggregator<br/>Edge Processing]
+    end
+    
+    subgraph "Cloud Platform"
+        API[API<br/>Data Ingestion]
+        DB[(Time Series Database<br/>InfluxDB)]
+        PROC[Data Processing<br/>Anomaly Detection]
+        ALERT[Alert Engine<br/>Notification System]
+    end
+    
+    subgraph "User Interface"
+        DASH[Monitoring Dashboard<br/>Real-time Status]
+        MOBILE[Mobile App<br/>Field Technicians]
+        EMAIL[Email/SMS Alerts]
+    end
+    
+    VM1 -->|LoRa 915MHz| GW
+    VM2 -->|LoRa 915MHz| GW
+    VM3 -->|LoRa 915MHz| GW
+    
+    GW -->|HTTPS/MQTT| API
+    API --> DB
+    API --> PROC
+    PROC --> ALERT
+    DB --> DASH
+    ALERT --> EMAIL
+    ALERT --> MOBILE
+    DASH --> MOBILE
+```
+
+
 
 ### Security Requirements Specification
 
