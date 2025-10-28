@@ -1,0 +1,17 @@
+services:
+  team8-circuiteers:
+    build: .
+    volumes:
+      - ./:/workdir
+      - ./dev:/home/user/dev 
+    devices:
+      # Mount USB devices for embedded board programming/debugging
+      - /dev/bus/usb:/dev/bus/usb
+    privileged: true # Required for USB device access and debugging
+    stdin_open: true
+    tty: true
+    environment:
+      - ZEPHYR_BASE=/workdir/zephyr
+      - ZEPHYR_TOOLCHAIN_VARIANT=zephyr
+      - ZEPHYR_SDK_INSTALL_DIR=/opt/toolchains/zephyr-sdk-0.17.2
+    command: ["/bin/bash", "-l"]

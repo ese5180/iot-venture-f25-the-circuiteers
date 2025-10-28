@@ -1,0 +1,28 @@
+manifest:
+  remotes:
+    - name: zephyrproject-rtos
+      url-base: https://github.com/zephyrproject-rtos
+
+  projects:
+    - name: zephyr
+      remote: zephyrproject-rtos
+      revision: v4.3.0-rc1
+      import:
+        # Minimal setup for LoRa application with Nordic nRF7002 DK and STM32
+        name-allowlist:
+          # Core ARM support
+          - cmsis          # ARM Cortex-M support
+          
+          # Hardware Abstraction Layers
+          - hal_stm32      # STM32 Hardware Abstraction Layer (for NUCLEO boards)
+          - hal_nordic     # Nordic nRF series HAL (for nRF7002 DK)
+          
+          # Cryptographic libraries (required for LoRaWAN security)
+          - mbedtls        # Cryptographic library for LoRaWAN
+          - tinycrypt      # Lightweight crypto library
+          
+          # LoRa modules (self-contained, no external loramac-node dependency)
+          - loramac-node   # LoRaMAC node implementation (for internal Zephyr drivers)
+
+  self:
+    path: iot-venture-f25-the-circuiteers
