@@ -132,3 +132,25 @@ west update --fetch-opt=--filter=tree:0
 ```
 
 The update process is resumable and will continue from where it left off.
+
+
+
+#### Bootloader flashing
+
+First flash the bootloader
+```
+/Applications/STMicroelectronics/STM32Cube/STM32CubeProgrammer/STM32CubeProgrammer.app/Contents/MacOs/bin/STM32_Programmer_CLI \
+  -c port=SWD mode=UR \
+  -w ./build/mcuboot/zephyr/zephyr.hex \              
+  -v \
+  -rst
+```
+
+Then flash the signed application
+```
+/Applications/STMicroelectronics/STM32Cube/STM32CubeProgrammer/STM32CubeProgrammer.app/Contents/MacOs/bin/STM32_Programmer_CLI \
+  -c port=SWD mode=UR \
+  -w ./build/boot_with_keys/zephyr/zephyr.signed.hex \
+  -v \
+  -rst
+```
