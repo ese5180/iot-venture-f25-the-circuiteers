@@ -21,30 +21,28 @@
             reg = <0x00000000 DT_SIZE_K(32)>;
         };
 
-        /* Primary application slot (slot0) - 104KB */
+        /* Primary application slot (slot0) - 88KB (reduced to make room) */
         slot0_partition: partition@8000 {
             label = "image-0";
-            reg = <0x00008000 DT_SIZE_K(104)>;
+            reg = <0x00008000 DT_SIZE_K(88)>;
         };
 
-        /* Secondary application slot (slot1) - 104KB */
-        slot1_partition: partition@22000 {
+        /* Secondary application slot (slot1) - 88KB */
+        slot1_partition: partition@1e000 {
             label = "image-1";
-            reg = <0x00022000 DT_SIZE_K(104)>;
+            reg = <0x0001e000 DT_SIZE_K(88)>;
         };
 
-        /* Scratch area for image swapping - 16KB */
-        scratch_partition: partition@3c000 {
+        /* Scratch area for image swapping - 32KB (needs to be same size as largest sector) */
+        scratch_partition: partition@34000 {
             label = "image-scratch";
+            reg = <0x00034000 DT_SIZE_K(32)>;
+        };
+
+        /* Storage area for persistent data - 16KB */
+        storage_partition: partition@3c000 {
+            label = "storage";
             reg = <0x0003c000 DT_SIZE_K(16)>;
         };
-
-        /* Optional: Storage area for persistent data - 0KB (can be added if needed)
-         * If you need storage, reduce slot sizes to make room
-         * storage_partition: partition@40000 {
-         *     label = "storage";
-         *     reg = <0x00040000 DT_SIZE_K(16)>;
-         * };
-         */
     };
 };
