@@ -1,0 +1,56 @@
+// / {
+// 	aliases {
+// 		led5180 = &led1;// Alias for the LED1 node (LED2 on nRF7002DK)
+// 		button5180 = &button0;// Alias for the button (sw0 on nRF7002DK)
+// 	};
+// };
+
+// /*
+//  * Example configuration of a BME280 device on an Arduino I2C bus.
+//  *
+//  * Device address 0x77 is assumed. Your device may have a different
+//  * address; check your device documentation if unsure.
+//  */
+// &arduino_i2c {
+// 	status = "okay";
+// 	bme280@76 {
+// 		compatible = "bosch,bme280";
+// 		reg = <0x76>;
+// 	};
+// };
+
+
+/ {
+    aliases {
+        led5180 = &led1;
+        button5180 = &button0;
+    };
+};
+
+&i2c1 {
+    status = "okay";
+    pinctrl-0 = <&i2c1_default>;
+    pinctrl-1 = <&i2c1_sleep>;
+    pinctrl-names = "default", "sleep";
+
+    bme280@76 {
+        compatible = "bosch,bme280";
+        status = "okay";
+        reg = <0x76>;
+    };
+};
+
+&pinctrl {
+    /omit-if-no-ref/ i2c1_default: i2c1_default {
+        group1 {
+            psels = <NRF_PSEL(TWIM_SCL, 1, 14)>, <NRF_PSEL(TWIM_SDA, 1, 15)>;
+        };
+    };
+
+    /omit-if-no-ref/ i2c1_sleep: i2c1_sleep {
+        group1 {
+            psels = <NRF_PSEL(TWIM_SCL, 1, 14)>, <NRF_PSEL(TWIM_SDA, 1, 15)>;
+            low-power-enable;
+        };
+    };
+};

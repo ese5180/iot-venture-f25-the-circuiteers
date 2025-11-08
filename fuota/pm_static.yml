@@ -1,0 +1,25 @@
+# pm_static.yml — For NUCLEO-WL55JC (256 KB Flash, Overwrite Only Mode)
+
+flash_primary:
+  base: 0x08000000
+  size: 0x00040000         # 256 KB total internal flash
+
+# --- Bootloader ---
+mcuboot:
+  address: 0x08000000
+  size: 0x00008000         # 32 KB for MCUboot
+
+# --- Main Firmware Slot (active image) ---
+slot0_partition:
+  address: 0x08008000
+  size: 0x00018000         # 96 KB for running firmware (slot 0)
+
+# --- Secondary Slot (used for FUOTA download) ---
+slot1_partition:
+  address: 0x08020000
+  size: 0x00018000         # 96 KB for new firmware (slot 1)
+
+# --- Optional NVS area for LoRaWAN settings (DevNonce, etc.) ---
+nvs_storage:
+  address: 0x08038000
+  size: 0x00008000         # 32 KB reserved for NVS / settings

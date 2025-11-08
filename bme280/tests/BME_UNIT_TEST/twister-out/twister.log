@@ -1,0 +1,81 @@
+2025-10-13 15:06:02,076 - twister - INFO - Using Ninja..
+2025-10-13 15:06:02,228 - twister - INFO - Zephyr version: ncs-v3.1.1
+2025-10-13 15:06:02,254 - twister - DEBUG - Running cmake script /opt/nordic/ncs/v3.1.1/zephyr/cmake/verify-toolchain.cmake
+2025-10-13 15:06:02,254 - twister - DEBUG - Calling cmake: /opt/homebrew/bin/cmake -DFORMAT=json -P /opt/nordic/ncs/v3.1.1/zephyr/cmake/verify-toolchain.cmake
+2025-10-13 15:06:02,525 - twister - DEBUG - Finished running /opt/nordic/ncs/v3.1.1/zephyr/cmake/verify-toolchain.cmake
+2025-10-13 15:06:02,525 - twister - INFO - Using 'zephyr' toolchain.
+2025-10-13 15:06:03,823 - twister - DEBUG - Reading testsuite configuration files under /Users/shannyao/Desktop/Master/ESE_5180/lab-1-f25-zephyr-lab1-group10/bme280/tests/BME_UNIT_TEST...
+2025-10-13 15:06:03,823 - twister - DEBUG - Found possible testsuite in /Users/shannyao/Desktop/Master/ESE_5180/lab-1-f25-zephyr-lab1-group10/bme280/tests/BME_UNIT_TEST
+2025-10-13 15:06:03,841 - twister - DEBUG - No duplicates found.
+2025-10-13 15:06:03,843 - twister - DEBUG - platform filter: ['qemu_cortex_m3']
+2025-10-13 15:06:03,843 - twister - DEBUG -   vendor filter: []
+2025-10-13 15:06:03,843 - twister - DEBUG -     arch_filter: None
+2025-10-13 15:06:03,843 - twister - DEBUG -      tag_filter: None
+2025-10-13 15:06:03,843 - twister - DEBUG -     exclude_tag: None
+2025-10-13 15:06:03,843 - twister - DEBUG - Checking platform filter: ['qemu_cortex_m3']
+2025-10-13 15:06:03,843 - twister - INFO - Building initial testsuite list...
+2025-10-13 15:06:03,844 - twister - INFO - Writing JSON report /Users/shannyao/Desktop/Master/ESE_5180/lab-1-f25-zephyr-lab1-group10/bme280/tests/BME_UNIT_TEST/twister-out/testplan.json
+2025-10-13 15:06:03,950 - twister - INFO - Adding tasks to the queue...
+2025-10-13 15:06:03,950 - twister - DEBUG - adding qemu_cortex_m3/ti_lm3s6965/zephyr/bme280.test
+2025-10-13 15:06:03,981 - twister - INFO - Added initial list of jobs to queue
+2025-10-13 15:06:03,999 - twister - DEBUG - Launched 8 jobs
+2025-10-13 15:06:04,315 - twister - DEBUG - Running cmake on /Users/shannyao/Desktop/Master/ESE_5180/lab-1-f25-zephyr-lab1-group10/bme280/tests/BME_UNIT_TEST for qemu_cortex_m3/ti_lm3s6965
+2025-10-13 15:06:04,316 - twister - DEBUG - Calling cmake: /opt/homebrew/bin/cmake -B/Users/shannyao/Desktop/Master/ESE_5180/lab-1-f25-zephyr-lab1-group10/bme280/tests/BME_UNIT_TEST/twister-out/qemu_cortex_m3_ti_lm3s6965/zephyr/bme280.test -DTC_RUNID=8c72e7ae355825b67b54219564ebec65 -DTC_NAME=bme280.test -DCONFIG_COMPILER_WARNINGS_AS_ERRORS=y -DEXTRA_GEN_EDT_ARGS=--edtlib-Werror -GNinja -DPython3_EXECUTABLE=/Users/shannyao/Desktop/Master/ESE_5180/lab-1-f25-zephyr-lab1-group10/lab1_part6/tests/SUM_UNIT_TEST/venv/bin/python3.13 -DZEPHYR_TOOLCHAIN_VARIANT=zephyr -S/Users/shannyao/Desktop/Master/ESE_5180/lab-1-f25-zephyr-lab1-group10/bme280/tests/BME_UNIT_TEST -DQEMU_PIPE=/Users/shannyao/Desktop/Master/ESE_5180/lab-1-f25-zephyr-lab1-group10/bme280/tests/BME_UNIT_TEST/twister-out/qemu_cortex_m3_ti_lm3s6965/zephyr/bme280.test/qemu-fifo -DBOARD=qemu_cortex_m3/ti_lm3s6965
+2025-10-13 15:06:09,692 - twister - DEBUG - Finished running cmake /Users/shannyao/Desktop/Master/ESE_5180/lab-1-f25-zephyr-lab1-group10/bme280/tests/BME_UNIT_TEST for qemu_cortex_m3/ti_lm3s6965 in 5.37 seconds
+2025-10-13 15:06:09,699 - twister - DEBUG - build test: qemu_cortex_m3/ti_lm3s6965/zephyr/bme280.test
+2025-10-13 15:06:09,700 - twister - DEBUG - Building /Users/shannyao/Desktop/Master/ESE_5180/lab-1-f25-zephyr-lab1-group10/bme280/tests/BME_UNIT_TEST for qemu_cortex_m3/ti_lm3s6965
+2025-10-13 15:06:09,705 - twister - DEBUG - Running /opt/homebrew/bin/cmake --build /Users/shannyao/Desktop/Master/ESE_5180/lab-1-f25-zephyr-lab1-group10/bme280/tests/BME_UNIT_TEST/twister-out/qemu_cortex_m3_ti_lm3s6965/zephyr/bme280.test
+2025-10-13 15:06:13,357 - twister - DEBUG - Finished building /Users/shannyao/Desktop/Master/ESE_5180/lab-1-f25-zephyr-lab1-group10/bme280/tests/BME_UNIT_TEST for qemu_cortex_m3/ti_lm3s6965 in 3.66 seconds
+2025-10-13 15:06:13,358 - twister - DEBUG - Determine test cases for test instance: qemu_cortex_m3/ti_lm3s6965/zephyr/bme280.test
+2025-10-13 15:06:13,358 - twister - DEBUG - Determine test cases for test suite: bme280.test
+2025-10-13 15:06:13,398 - twister - DEBUG - Test instance qemu_cortex_m3/ti_lm3s6965/zephyr/bme280.test already has 4 testcase(s) known: [<TestCase bme280.test.dt_sanity.console_ready with None>, <TestCase bme280.test.dt_sanity.soc_node_exists with None>, <TestCase bme280.test.dt_sanity.sys_clock_ticks with None>, <TestCase bme280.test.dt_sanity.uart0_ok with None>]
+2025-10-13 15:06:13,398 - twister - DEBUG - Detected 4 Ztest case(s): [bme280.test.dt_sanity.sys_clock_ticks, bme280.test.dt_sanity.uart0_ok, bme280.test.dt_sanity.soc_node_exists, bme280.test.dt_sanity.console_ready] in /Users/shannyao/Desktop/Master/ESE_5180/lab-1-f25-zephyr-lab1-group10/bme280/tests/BME_UNIT_TEST/twister-out/qemu_cortex_m3_ti_lm3s6965/zephyr/bme280.test/zephyr/zephyr.elf
+2025-10-13 15:06:13,407 - twister - DEBUG - run test: qemu_cortex_m3/ti_lm3s6965/zephyr/bme280.test
+2025-10-13 15:06:13,407 - twister - DEBUG - Reset instance status from 'passed' to None before run.
+2025-10-13 15:06:13,409 - twister - DEBUG - Spawning QEMUHandler Thread for qemu_cortex_m3/ti_lm3s6965/zephyr/bme280.test
+2025-10-13 15:06:13,437 - twister - DEBUG - Running qemu_cortex_m3/ti_lm3s6965/zephyr/bme280.test (qemu)
+2025-10-13 15:06:13,445 - twister - DEBUG - Spawning QEMUHandler Thread for qemu_cortex_m3/ti_lm3s6965/zephyr/bme280.test
+2025-10-13 15:06:13,990 - twister - DEBUG - QEMU (64877): *** Booting nRF Connect SDK v3.1.1-e2a97fe2578a ***
+2025-10-13 15:06:13,991 - twister - DEBUG - QEMU (64877): *** Using Zephyr OS v4.1.99-ff8f0c579eeb ***
+2025-10-13 15:06:13,991 - twister - DEBUG - QEMU (64877): Running TESTSUITE dt_sanity
+2025-10-13 15:06:13,992 - twister - DEBUG - QEMU (64877): ===================================================================
+2025-10-13 15:06:13,992 - twister - DEBUG - QEMU (64877): START - test_console_ready
+2025-10-13 15:06:14,071 - twister - DEBUG - QEMU (64877):  PASS - test_console_ready in 0.001 seconds
+2025-10-13 15:06:14,071 - twister - DEBUG - QEMU (64877): ===================================================================
+2025-10-13 15:06:14,071 - twister - DEBUG - QEMU (64877): START - test_soc_node_exists
+2025-10-13 15:06:14,071 - twister - DEBUG - QEMU (64877):  PASS - test_soc_node_exists in 0.001 seconds
+2025-10-13 15:06:14,071 - twister - DEBUG - QEMU (64877): ===================================================================
+2025-10-13 15:06:14,071 - twister - DEBUG - QEMU (64877): START - test_sys_clock_ticks
+2025-10-13 15:06:14,118 - twister - DEBUG - QEMU (64877):  PASS - test_sys_clock_ticks in 0.019 seconds
+2025-10-13 15:06:14,118 - twister - DEBUG - QEMU (64877): ===================================================================
+2025-10-13 15:06:14,118 - twister - DEBUG - QEMU (64877): START - test_uart0_ok
+2025-10-13 15:06:14,119 - twister - DEBUG - QEMU (64877):  PASS - test_uart0_ok in 0.001 seconds
+2025-10-13 15:06:14,125 - twister - DEBUG - QEMU (64877): ===================================================================
+2025-10-13 15:06:14,125 - twister - DEBUG - QEMU (64877): TESTSUITE dt_sanity succeeded
+2025-10-13 15:06:14,125 - twister - DEBUG - QEMU (64877): 
+2025-10-13 15:06:14,125 - twister - DEBUG - QEMU (64877): ------ TESTSUITE SUMMARY START ------
+2025-10-13 15:06:14,125 - twister - DEBUG - QEMU (64877): 
+2025-10-13 15:06:14,125 - twister - DEBUG - QEMU (64877): SUITE PASS - 100.00% [dt_sanity]: pass = 4, fail = 0, skip = 0, total = 4 duration = 0.022 seconds
+2025-10-13 15:06:14,126 - twister - DEBUG - QEMU (64877):  - PASS - [dt_sanity.test_console_ready] duration = 0.001 seconds
+2025-10-13 15:06:14,126 - twister - DEBUG - QEMU (64877):  - PASS - [dt_sanity.test_soc_node_exists] duration = 0.001 seconds
+2025-10-13 15:06:14,126 - twister - DEBUG - QEMU (64877):  - PASS - [dt_sanity.test_sys_clock_ticks] duration = 0.019 seconds
+2025-10-13 15:06:14,137 - twister - DEBUG - QEMU (64877):  - PASS - [dt_sanity.test_uart0_ok] duration = 0.001 seconds
+2025-10-13 15:06:14,137 - twister - DEBUG - QEMU (64877): 
+2025-10-13 15:06:14,170 - twister - DEBUG - QEMU (64877): ------ TESTSUITE SUMMARY END ------
+2025-10-13 15:06:14,171 - twister - DEBUG - QEMU (64877): 
+2025-10-13 15:06:14,171 - twister - DEBUG - QEMU (64877): ===================================================================
+2025-10-13 15:06:14,171 - twister - DEBUG - QEMU (64877): RunID: 8c72e7ae355825b67b54219564ebec65
+2025-10-13 15:06:14,171 - twister - DEBUG - QEMU (64877): PROJECT EXECUTION SUCCESSFUL
+2025-10-13 15:06:15,173 - twister - DEBUG - QEMU (64877) complete with passed (None) after 1.2326109409332275 seconds
+2025-10-13 15:06:15,196 - twister - DEBUG - No timeout, return code from QEMU (None): 0
+2025-10-13 15:06:15,196 - twister - DEBUG - return code from QEMU (None): 0
+2025-10-13 15:06:15,196 - twister - DEBUG - run status: qemu_cortex_m3/ti_lm3s6965/zephyr/bme280.test passed
+2025-10-13 15:06:15,251 - twister - INFO - 1 test scenarios (1 configurations) selected, 0 configurations filtered (0 by static filter, 0 at runtime).
+2025-10-13 15:06:15,283 - twister - INFO - [32m1 of 1[39m executed test configurations passed (100.00%), 0 built (not run), 0 failed, 0 errored, with no warnings in 13.21 seconds.
+2025-10-13 15:06:15,283 - twister - INFO - 4 of 4 executed test cases passed (100.00%) on 1 out of total 1106 platforms (0.09%).
+2025-10-13 15:06:15,283 - twister - INFO - [32m1[39m test configurations executed on platforms, [36m0[39m test configurations were only built.
+2025-10-13 15:06:15,283 - twister - INFO - Saving reports...
+2025-10-13 15:06:15,283 - twister - INFO - Writing JSON report /Users/shannyao/Desktop/Master/ESE_5180/lab-1-f25-zephyr-lab1-group10/bme280/tests/BME_UNIT_TEST/twister-out/twister.json
+2025-10-13 15:06:15,283 - twister - INFO - Writing xunit report /Users/shannyao/Desktop/Master/ESE_5180/lab-1-f25-zephyr-lab1-group10/bme280/tests/BME_UNIT_TEST/twister-out/twister.xml...
+2025-10-13 15:06:15,285 - twister - INFO - Writing xunit report /Users/shannyao/Desktop/Master/ESE_5180/lab-1-f25-zephyr-lab1-group10/bme280/tests/BME_UNIT_TEST/twister-out/twister_report.xml...
+2025-10-13 15:06:15,285 - twister - INFO - Run completed

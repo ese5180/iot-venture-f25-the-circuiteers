@@ -15,14 +15,13 @@
 LOG_MODULE_REGISTER(lorawan_fuota, CONFIG_LORAWAN_SERVICES_LOG_LEVEL);
 
 /* Customize based on device configuration */
-#define LORAWAN_DEV_EUI		{ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }
-#define LORAWAN_JOIN_EUI	{ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }
-#define LORAWAN_APP_KEY		{ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,\
-				  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }
+#define LORAWAN_DEV_EUI  { 0x70, 0xB3, 0xD5, 0x7E, 0xD0, 0x07, 0x3C, 0xC0 }
+#define LORAWAN_JOIN_EUI { 0x00, 0x80, 0xE1, 0x15, 0x06, 0x1D, 0x9F, 0x39 }
+#define LORAWAN_APP_KEY  { 0x3D, 0xBF, 0x23, 0xF7, 0x33, 0xA4, 0x89, 0x19, 0xA4, 0x5A, 0x7F, 0xC6, 0x49, 0xFC, 0x64, 0xE9 }
 
-#define DELAY K_SECONDS(180)
+#define DELAY K_SECONDS(3)
 
-char data[] = {'h', 'e', 'l', 'l', 'o', 'w', 'o', 'r', 'l', 'd'};
+char data[] = {'u', 'p', 'd', 'a', 't', 'e', 'd', ' ', 'd', 'a', 't', 'a'};
 
 static void downlink_info(uint8_t port, uint8_t flags, int16_t rssi, int8_t snr, uint8_t len,
 			  const uint8_t *data)
@@ -120,8 +119,9 @@ int main(void)
 	 */
 	while (1) {
 		ret = lorawan_send(2, data, sizeof(data), LORAWAN_MSG_UNCONFIRMED);
+
 		if (ret == 0) {
-			LOG_INF("Hello World sent!");
+			LOG_INF("Updated sent!");
 		} else {
 			LOG_ERR("lorawan_send failed: %d", ret);
 		}
@@ -131,3 +131,6 @@ int main(void)
 
 	return 0;
 }
+
+
+

@@ -1,0 +1,22 @@
+/*
+ * Device tree overlay for nRF7002DK nRF5340 CPUAPP NS
+ * GPIO testing configuration
+ */
+
+/* Enable GPIO0 and GPIO1 */
+&gpio0 {
+	status = "okay";
+};
+
+&gpio1 {
+	status = "okay";
+};
+
+/* Configure test pins for GPIO control */
+/ {
+	/* Define aliases for easy access */
+	aliases {
+		gpio0 = &gpio0;
+		gpio1 = &gpio1;
+	};
+};

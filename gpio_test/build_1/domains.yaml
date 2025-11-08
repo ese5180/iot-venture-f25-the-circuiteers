@@ -1,0 +1,7 @@
+default: gpio_test
+build_dir: /Users/shannyao/Desktop/Master/ESE_5180/iot-venture-f25-the-circuiteers/gpio_test/build_1
+domains:
+  - name: gpio_test
+    build_dir: /Users/shannyao/Desktop/Master/ESE_5180/iot-venture-f25-the-circuiteers/gpio_test/build_1/gpio_test
+flash_order:
+  - gpio_test

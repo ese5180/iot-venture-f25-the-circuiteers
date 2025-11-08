@@ -1,0 +1,8 @@
+<testsuites>
+	<testsuite name="qemu_cortex_m3/ti_lm3s6965" timestamp="2025-10-13T15:06:03.843995" time="1.23" tests="1" failures="0" errors="0" skipped="0">
+		<properties>
+			<property name="version" value="ncs-v3.1.1" />
+		</properties>
+		<testcase classname="qemu_cortex_m3/ti_lm3s6965:bme280.test" name="bme280.test" time="1.23" />
+	</testsuite>
+</testsuites>
