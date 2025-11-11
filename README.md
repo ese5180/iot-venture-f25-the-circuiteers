@@ -314,3 +314,4 @@ The software system manages distributed sensor data collection, wireless transmi
 
 ### Hardware and Software BOM
 
+Link: https://docs.google.com/spreadsheets/d/1TTWYfVYijEID34pga0s4eGWvey3Sqpn2U45rw3sVCuY/edit?usp=sharing
