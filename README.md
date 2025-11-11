@@ -312,6 +312,6 @@ The software system manages distributed sensor data collection, wireless transmi
 
 **SRS 04** – The software shall maintain a local data buffer capable of storing 24 hours of sensor readings in case of communication failure, with automatic retransmission upon connection restoration.
 
-### Hardware and Software BOM
+### Power Budget, Hardware and Software BOM
 
 Link: https://docs.google.com/spreadsheets/d/1TTWYfVYijEID34pga0s4eGWvey3Sqpn2U45rw3sVCuY/edit?usp=sharing
