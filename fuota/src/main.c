@@ -12,6 +12,11 @@
 #include <zephyr/logging/log.h>
 #include <zephyr/lorawan/lorawan.h>
 
+// testing printk
+#include <zephyr/sys/printk.h>
+
+
+
 LOG_MODULE_REGISTER(lorawan_fuota, CONFIG_LORAWAN_SERVICES_LOG_LEVEL);
 
 /* Customize based on device configuration */
@@ -19,7 +24,7 @@ LOG_MODULE_REGISTER(lorawan_fuota, CONFIG_LORAWAN_SERVICES_LOG_LEVEL);
 #define LORAWAN_JOIN_EUI { 0x00, 0x80, 0xE1, 0x15, 0x06, 0x1D, 0x9F, 0x39 }
 #define LORAWAN_APP_KEY  { 0x3D, 0xBF, 0x23, 0xF7, 0x33, 0xA4, 0x89, 0x19, 0xA4, 0x5A, 0x7F, 0xC6, 0x49, 0xFC, 0x64, 0xE9 }
 
-#define DELAY K_SECONDS(3)
+#define DELAY K_SECONDS(20)
 
 char data[] = {'u', 'p', 'd', 'a', 't', 'e', 'd', ' ', 'd', 'a', 't', 'a'};
 
@@ -52,9 +57,12 @@ static void fuota_finished(void)
 
 int main(void)
 {
+
+	printk("FUOTA app booting...\n");
+
 	const struct device *lora_dev;
 	struct lorawan_join_config join_cfg;
-	uint8_t dev_eui[] = LORAWAN_DEV_EUI;
+	uint8_t dev_eui[] = LORAWAN_DEV_EUI; 
 	uint8_t join_eui[] = LORAWAN_JOIN_EUI;
 	uint8_t app_key[] = LORAWAN_APP_KEY;
 	int ret;

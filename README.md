@@ -51,97 +51,65 @@ The product is a smart health monitoring system for vending machines that uses s
 
 ### System-Level Diagrams
 
-#### Device Block Diagram
-
-![Device Block Diagram](images/Device_diagram.png)
+#### Device Power Block Diagram
 
 Source Code:
 ```mermaid
 graph TB
-    subgraph "Power System"
-        AC[AC Power Input] --> PSU[AC/DC Converter]
-        PSU --> PMIC[Power Management]
-        BAT[Battery Backup] --> PMIC
+    subgraph G1["Gateway Power Supply"]
+        OUTLET["Wall Outlet<br/>(AC 120V or 220V)"]
+        GW["LoRa Gateway"]
+        OUTLET --> GW
     end
-    
-    subgraph "Core Processing"
-        EDGE[Nordic nRF7002 DK<br/>Edge Device<br/>LoRaWAN]
-        CENTRAL[Nordic nRF7002 DK<br/>Central Processor<br/>LoRaWAN]
+
+    subgraph G2["Edge Node Power Supply<br/>Vending Machine"]
+        BATT["Battery Pack<br/>(Li-ion 3.6V/3.7V)"]
+        NUCLEO["Nucleo WL55jc1 Board"]
+        SENSORS["Sensors<br/>(Temperature, Vibration)"]
+        BATT --> NUCLEO --> SENSORS
     end
-    
-    subgraph "Sensors"
-        TEMP[Temperature Sensor]
-        VIB[Vibration Sensor]
-        POWER[Power Monitor]
-    end
-    
-    subgraph "User Interface"
-        LED[Status Indicators]
-        BUZZER[Alert System]
-    end
-    
-    subgraph "Communication"
-        LORA[LoRa Module - SparkFun Pro RF]
-        GATE[LoRa Gateway]
-        ANT[LoRa Antenna]
-    end
-    
-    PMIC --> EDGE
-    PMIC --> CENTRAL
-    EDGE --> TEMP
-    EDGE --> VIB
-    EDGE --> POWER
-    EDGE --> LORA
-    CENTRAL --> LORA
-    LORA --> ANT
-    CENTRAL --> GATE
-    EDGE --> GATE
-    CENTRAL --> LED
-    CENTRAL --> BUZZER
+
+    G1 -.-> G2
+
 ```
 
 #### Communication Architecture Diagram
 
-![Communication Architecture Diagram](images/Communication_diagram.png)
-
 Source Code:
 ```mermaid
 graph TB
-    subgraph "Edge Layer - Vending Machines"
-        VM1[Vending Machine #1<br/>Temperature + Vibration Sensors + more]
-        VM2[Vending Machine #2<br/>Temperature + Vibration Sensors + more]
-        VM3[Vending Machine #N<br/>Temperature + Vibration Sensors + more]
+    subgraph "Edge Layer Machines"
+        VM1[Vending Machine #1<br/>Nucleo WL55jc1<br/> + Temperature & Vibration Sensors + more]
+        VM2[Vending Machine #2<br/>Nucleo WL55jc1<br/>  + Temperature & Vibration Sensors + more]
+        VM3[Vending Machine #N<br/>Nucleo WL55jc1<br/>  + Temperature & Vibration Sensors + more]
     end
     
     subgraph "Gateway Layer"
-        GW[LoRa Gateway<br/>nRF7002 DK<br/>Data Aggregator<br/>Edge Processing]
+        GW[LoRa Gateway<br/>Multicast Group]
     end
     
-    subgraph "Cloud Platform"
+    subgraph "AWS Cloud Service"
         API[API<br/>Data Ingestion]
-        DB[(Time Series Database<br/>InfluxDB)]
+        DB[Database]
         PROC[Data Processing<br/>Anomaly Detection]
         ALERT[Alert Engine<br/>Notification System]
     end
     
     subgraph "User Interface"
-        DASH[Monitoring Dashboard<br/>Real-time Status]
         MOBILE[Mobile App<br/>Field Technicians]
         EMAIL[Email/SMS Alerts]
     end
     
-    VM1 -->|LoRa 915MHz| GW
-    VM2 -->|LoRa 915MHz| GW
-    VM3 -->|LoRa 915MHz| GW
+    VM1 <-->|LoRa 915MHz| GW
+    VM2 <-->|LoRa 915MHz| GW
+    VM3 <-->|LoRa 915MHz| GW
     
-    GW -->|HTTPS/MQTT| API
+    GW <-->|WiFi| API
     API --> DB
     API --> PROC
     PROC --> ALERT
-    DB --> DASH
     ALERT --> EMAIL
     ALERT --> MOBILE
-    DASH --> MOBILE
 ```
 
 ### Security Requirements Specification
