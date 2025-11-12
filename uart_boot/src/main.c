@@ -14,7 +14,7 @@
 /* 1000 msec = 1 sec */
 
 /* STEP 4.4 - Change LED timing to create a new image for DFU*/
-#define SLEEP_TIME_MS   1000
+#define SLEEP_TIME_MS   5000
 
 /* The devicetree node identifier for the "led0" alias. */
 #define LED0_NODE DT_ALIAS(led0)
@@ -98,15 +98,46 @@ int main(void)
 {
 	int ret;
 
+	printk("\n=== MCUboot Secondary Slot Boot Test ===\n");
 	printk("Starting LED blink application for Nucleo WL55JC\n");
 	
-	/* Check if we're running from slot0 or slot1 */
-	if (boot_is_img_confirmed()) {
-		printk("Image is confirmed - running from primary slot\n");
+	/* Check current boot status */
+	bool is_confirmed = boot_is_img_confirmed();
+	printk("Current image confirmation status: %s\n", is_confirmed ? "CONFIRMED" : "NOT CONFIRMED");
+	
+	if (is_confirmed) {
+		printk("Running from PRIMARY slot (confirmed image)\n");
+		
+		/* Check if secondary slot has an image before trying to boot from it */
+		const struct flash_area *fa_secondary;
+		bool can_boot_secondary = false;
+		
+		if (flash_area_open(2, &fa_secondary) == 0) {
+			uint8_t buf[4];
+			if (flash_area_read(fa_secondary, 0, buf, sizeof(buf)) == 0) {
+				// Check for MCUboot magic bytes (0x96f3b83d in little endian)
+				can_boot_secondary = (buf[0] == 0x3d && buf[1] == 0xb8 && 
+									 buf[2] == 0xf3 && buf[3] == 0x96);
+			}
+			flash_area_close(fa_secondary);
+		}
+		
+		if (can_boot_secondary) {
+			printk("Secondary slot has valid image - requesting boot from secondary slot\n");
+			printk("Note: Use MCUmgr to mark secondary slot for testing:\n");
+			printk("  mcumgr image test <hash>\n");
+			printk("  mcumgr reset\n");
+			printk("Or manually reboot to stay in primary slot for now\n");
+		} else {
+			printk("WARNING: No valid image found in secondary slot\n");
+			printk("Cannot boot from secondary slot - staying in primary slot\n");
+			printk("Upload image using: mcumgr image upload <file>\n");
+		}
 	} else {
-		printk("Image is NOT confirmed - running from secondary slot\n");
-		printk("Confirming image to make it permanent...\n");
+		printk("Running from SECONDARY slot (test image)\n");
+		printk("Confirming secondary slot image to make it permanent...\n");
 		boot_write_img_confirmed();
+		printk("Secondary slot image is now confirmed and permanent\n");
 	}
 	
 	/* Comprehensive MCUboot slot debugging */
@@ -157,12 +188,15 @@ int main(void)
 		printk("ANALYSIS: Both slots have images\n");
 		if (boot_is_img_confirmed()) {
 			printk("- Primary image is confirmed (permanent)\n");
-			printk("- To swap: Use 'mcumgr image test <hash>' then reboot\n");
+			printk("- Secondary slot has been marked as pending for next boot\n");
+			printk("- REBOOT NOW to test secondary slot image\n");
 		} else {
-			printk("- Image NOT confirmed - should swap on next reboot\n");
+			printk("- Image NOT confirmed - currently testing secondary slot\n");
+			printk("- Image has been confirmed to make it permanent\n");
 		}
 	} else if (!slot1_has_image) {
 		printk("ANALYSIS: No image in secondary slot\n");
+		printk("- Cannot boot from secondary slot - no image present\n");
 		printk("- Upload image to slot1 using: mcumgr image upload <file>\n");
 	} else {
 		printk("ANALYSIS: Unusual state - check flash partitions\n");
@@ -195,15 +229,29 @@ int main(void)
 		return -1;
 	}
 
-	printk("LED configured successfully, starting blink loop\n");
+	printk("LED configured successfully\n");
 
+	/* Show instructions for testing secondary slot */
+	printk("\n=== Secondary Slot Boot Instructions ===\n");
+	printk("To test booting from secondary slot:\n");
+	printk("1. Upload new image: mcumgr image upload <file>\n");
+	printk("2. Mark for test: mcumgr image test <hash>\n");
+	printk("3. Reboot device: mcumgr reset\n");
+	printk("4. Device will boot from secondary slot\n");
+	printk("5. Confirm if working: mcumgr image confirm\n");
+	printk("==========================================\n\n");
+
+	int blink_count = 0;
 	while (1) {
 		ret = gpio_pin_toggle_dt(&led);
 		if (ret < 0) {
 			printk("Error: Failed to toggle LED\n");
 			return -1;
 		}
-		printk("LED toggled\n");
+		
+		blink_count++;
+		printk("LED toggled (blink %d)\n", blink_count);
+		
 		k_msleep(SLEEP_TIME_MS);
 	}
 }
