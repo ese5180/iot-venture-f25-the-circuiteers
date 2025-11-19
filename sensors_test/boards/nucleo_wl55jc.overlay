@@ -1,0 +1,43 @@
+/* 
+ * Devicetree overlay for dual sensor setup on Nucleo WL55JC1
+ * - BME280 on I2C2 (PA11/PA12) - Temperature, Pressure, Humidity
+ * - ADXL345 on I2C3 (PB13/PB14) - Accelerometer
+ */
+
+/* BME280 on I2C2 (pre-configured on this board) */
+&i2c2 {
+    bme280@77 {
+        compatible = "bosch,bme280";
+        reg = <0x77>;
+        status = "okay";
+    };
+};
+
+/* ADXL345 on I2C3 with custom pinctrl */
+&i2c3 {
+    status = "okay";
+    pinctrl-0 = <&i2c3_scl_pb13 &i2c3_sda_pb14>;
+    pinctrl-names = "default";
+    clock-frequency = <100000>;
+    
+    adxl345@53 {
+        compatible = "adi,adxl345";
+        reg = <0x53>;
+        status = "okay";
+    };
+};
+
+/* Pinctrl definitions for I2C3 on STM32WL55JC1 */
+&pinctrl {
+    i2c3_scl_pb13: i2c3_scl_pb13 {
+        pinmux = <STM32_PINMUX('B', 13, AF4)>;
+        bias-pull-up;
+        drive-open-drain;
+    };
+    
+    i2c3_sda_pb14: i2c3_sda_pb14 {
+        pinmux = <STM32_PINMUX('B', 14, AF4)>;
+        bias-pull-up;
+        drive-open-drain;
+    };
+};

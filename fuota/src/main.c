@@ -12,6 +12,9 @@
 #include <zephyr/logging/log.h>
 #include <zephyr/lorawan/lorawan.h>
 
+#include <zephyr/dfu/mcuboot.h>
+#include <zephyr/sys/reboot.h>
+
 // testing printk
 #include <zephyr/sys/printk.h>
 
@@ -53,6 +56,16 @@ static void fuota_finished(void)
 	 * In an actual application the firmware should be rebooted here if
 	 * no important tasks are pending
 	 */
+
+	int rc = boot_request_upgrade(BOOT_UPGRADE_PERMANENT);
+    if (rc) {
+        printk("boot_request_upgrade failed: %d\n", rc);
+        return;
+    }
+
+    k_msleep(100);
+    sys_reboot(SYS_REBOOT_COLD);
+	
 }
 
 int main(void)

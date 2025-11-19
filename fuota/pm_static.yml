@@ -18,6 +18,7 @@ slot0_partition:
 slot1_partition:
   address: 0x08020000
   size: 0x00018000         # 96 KB for new firmware (slot 1)
+  # size: 0x00001400         # 5 KB for new firmware (slot 1)
 
 # --- Optional NVS area for LoRaWAN settings (DevNonce, etc.) ---
 nvs_storage:
