@@ -41,7 +41,7 @@ const struct device *const adxl345_dev = DEVICE_DT_GET_ANY(adi_adxl345);
 static const struct device *init_bme280(void)
 {
     if (bme280_dev == NULL) {
-        LOG_ERR("BME280: Device not found in devicetree. Check overlay configuration.");
+        LOG_ERR("BME280: Device not found in devicetree. Check overlay configuration here.");
         return NULL;
     }
 
