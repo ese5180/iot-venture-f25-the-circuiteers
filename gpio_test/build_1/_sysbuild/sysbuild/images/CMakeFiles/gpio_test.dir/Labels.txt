@@ -1,0 +1,13 @@
+# Target labels
+ gpio_test
+# Source files and their labels
+/Users/shannyao/Desktop/Master/ESE_5180/iot-venture-f25-the-circuiteers/gpio_test/build_1/_sysbuild/sysbuild/images/CMakeFiles/gpio_test
+/Users/shannyao/Desktop/Master/ESE_5180/iot-venture-f25-the-circuiteers/gpio_test/build_1/_sysbuild/sysbuild/images/CMakeFiles/gpio_test.rule
+/Users/shannyao/Desktop/Master/ESE_5180/iot-venture-f25-the-circuiteers/gpio_test/build_1/_sysbuild/sysbuild/images/CMakeFiles/gpio_test-complete.rule
+/Users/shannyao/Desktop/Master/ESE_5180/iot-venture-f25-the-circuiteers/gpio_test/build_1/_sysbuild/sysbuild/images/gpio_test-prefix/src/gpio_test-stamp/gpio_test-build.rule
+/Users/shannyao/Desktop/Master/ESE_5180/iot-venture-f25-the-circuiteers/gpio_test/build_1/_sysbuild/sysbuild/images/gpio_test-prefix/src/gpio_test-stamp/gpio_test-configure.rule
+/Users/shannyao/Desktop/Master/ESE_5180/iot-venture-f25-the-circuiteers/gpio_test/build_1/_sysbuild/sysbuild/images/gpio_test-prefix/src/gpio_test-stamp/gpio_test-download.rule
+/Users/shannyao/Desktop/Master/ESE_5180/iot-venture-f25-the-circuiteers/gpio_test/build_1/_sysbuild/sysbuild/images/gpio_test-prefix/src/gpio_test-stamp/gpio_test-install.rule
+/Users/shannyao/Desktop/Master/ESE_5180/iot-venture-f25-the-circuiteers/gpio_test/build_1/_sysbuild/sysbuild/images/gpio_test-prefix/src/gpio_test-stamp/gpio_test-mkdir.rule
+/Users/shannyao/Desktop/Master/ESE_5180/iot-venture-f25-the-circuiteers/gpio_test/build_1/_sysbuild/sysbuild/images/gpio_test-prefix/src/gpio_test-stamp/gpio_test-patch.rule
+/Users/shannyao/Desktop/Master/ESE_5180/iot-venture-f25-the-circuiteers/gpio_test/build_1/_sysbuild/sysbuild/images/gpio_test-prefix/src/gpio_test-stamp/gpio_test-update.rule

@@ -1,0 +1,11 @@
+<testsuites>
+	<testsuite name="qemu_cortex_m3/ti_lm3s6965" timestamp="2025-10-13T15:06:03.843995" time="1.23" tests="4" failures="0" errors="0" skipped="0">
+		<properties>
+			<property name="version" value="ncs-v3.1.1" />
+		</properties>
+		<testcase classname="bme280.test" name="bme280.test.dt_sanity.sys_clock_ticks" time="0.02" />
+		<testcase classname="bme280.test" name="bme280.test.dt_sanity.uart0_ok" time="0.00" />
+		<testcase classname="bme280.test" name="bme280.test.dt_sanity.soc_node_exists" time="0.00" />
+		<testcase classname="bme280.test" name="bme280.test.dt_sanity.console_ready" time="0.00" />
+	</testsuite>
+</testsuites>

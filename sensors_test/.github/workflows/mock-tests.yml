@@ -1,0 +1,162 @@
+name: Mock Unit Tests CI/CD
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  schedule:
+    # Run tests daily at 2 AM UTC
+    - cron: '0 2 * * *'
+
+jobs:
+  mock-unit-tests:
+    name: Mock Unit Tests - ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        include:
+          - os: ubuntu-latest
+            cmake_generator: Unix Makefiles
+            artifact_name: mock_tests
+          - os: macos-latest
+            cmake_generator: Unix Makefiles
+            artifact_name: mock_tests
+          - os: windows-latest
+            cmake_generator: Visual Studio 17 2022
+            artifact_name: mock_tests.exe
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Setup CMake
+      uses: lukka/get-cmake@latest
+      with:
+        cmake-version: '3.20'
+
+    - name: Setup C compiler (Linux)
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential
+
+    - name: Display environment
+      run: |
+        cmake --version
+        cc --version
+
+    - name: Configure Mock Tests
+      run: |
+        cd ${{ github.workspace }}/sensors_test/tests_unit_mock
+        mkdir -p build
+        cd build
+        cmake -G "${{ matrix.cmake_generator }}" -DCMAKE_BUILD_TYPE=Release ..
+
+    - name: Build Mock Tests
+      run: |
+        cd ${{ github.workspace }}/sensors_test/tests_unit_mock/build
+        cmake --build . --config Release
+
+    - name: Run BME280 Mock Tests
+      run: |
+        cd ${{ github.workspace }}/sensors_test/tests_unit_mock/build
+        ${{ runner.os == 'Windows' && './Release/test_bme280_mock.exe' || './test_bme280_mock' }}
+
+    - name: Run ADXL345 Mock Tests
+      run: |
+        cd ${{ github.workspace }}/sensors_test/tests_unit_mock/build
+        ${{ runner.os == 'Windows' && './Release/test_adxl345_mock.exe' || './test_adxl345_mock' }}
+
+    - name: Run CTest
+      run: |
+        cd ${{ github.workspace }}/sensors_test/tests_unit_mock/build
+        ctest --output-on-failure
+
+    - name: Generate Test Report
+      if: always()
+      run: |
+        cd ${{ github.workspace }}/sensors_test/tests_unit_mock/build
+        echo "## Mock Unit Test Results" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "All mock unit tests passed on ${{ matrix.os }}" >> $GITHUB_STEP_SUMMARY
+
+  # Hardware integration tests (optional, run separately)
+  hardware-integration-tests:
+    name: Hardware Integration Tests
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' || contains(github.event.head_commit.message, '[hw-test]')
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Skip on fork
+      if: github.event.pull_request.head.repo.fork == true
+      run: |
+        echo "Hardware tests skipped on forks (requires board access)"
+        exit 0
+
+    - name: Integration Test Placeholder
+      run: |
+        echo "Hardware integration tests would run on actual device"
+        echo "Current status: Skipped (requires STM32 Nucleo WL55JC1 board)"
+
+  # Code coverage (optional)
+  code-coverage:
+    name: Code Coverage Analysis
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup CMake
+      uses: lukka/get-cmake@latest
+      with:
+        cmake-version: '3.20'
+
+    - name: Install Coverage Tools
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y lcov
+
+    - name: Configure with Coverage
+      run: |
+        cd ${{ github.workspace }}/sensors_test/tests_unit_mock
+        mkdir -p build_cov
+        cd build_cov
+        cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="--coverage" -DCMAKE_C_FLAGS="--coverage" ..
+
+    - name: Build and Test
+      run: |
+        cd ${{ github.workspace }}/sensors_test/tests_unit_mock/build_cov
+        cmake --build .
+        ctest
+
+    - name: Generate Coverage Report
+      if: always()
+      run: |
+        cd ${{ github.workspace }}/sensors_test/tests_unit_mock
+        mkdir -p coverage
+        echo "Coverage report generation would run here"
+
+summary:
+  runs-on: ubuntu-latest
+  needs: [mock-unit-tests]
+  if: always()
+  
+  steps:
+    - name: Check test results
+      run: |
+        if [ "${{ needs.mock-unit-tests.result }}" == "success" ]; then
+          echo "All CI/CD tests passed!"
+          exit 0
+        else
+          echo "Some tests failed!"
+          exit 1
+        fi

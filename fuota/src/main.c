@@ -12,17 +12,24 @@
 #include <zephyr/logging/log.h>
 #include <zephyr/lorawan/lorawan.h>
 
+#include <zephyr/dfu/mcuboot.h>
+#include <zephyr/sys/reboot.h>
+
+// testing printk
+#include <zephyr/sys/printk.h>
+
+
+
 LOG_MODULE_REGISTER(lorawan_fuota, CONFIG_LORAWAN_SERVICES_LOG_LEVEL);
 
 /* Customize based on device configuration */
-#define LORAWAN_DEV_EUI		{ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }
-#define LORAWAN_JOIN_EUI	{ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }
-#define LORAWAN_APP_KEY		{ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,\
-				  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }
+#define LORAWAN_DEV_EUI  { 0x70, 0xB3, 0xD5, 0x7E, 0xD0, 0x07, 0x3C, 0xC0 }
+#define LORAWAN_JOIN_EUI { 0x00, 0x80, 0xE1, 0x15, 0x06, 0x1D, 0x9F, 0x39 }
+#define LORAWAN_APP_KEY  { 0x3D, 0xBF, 0x23, 0xF7, 0x33, 0xA4, 0x89, 0x19, 0xA4, 0x5A, 0x7F, 0xC6, 0x49, 0xFC, 0x64, 0xE9 }
 
-#define DELAY K_SECONDS(180)
+#define DELAY K_SECONDS(20)
 
-char data[] = {'h', 'e', 'l', 'l', 'o', 'w', 'o', 'r', 'l', 'd'};
+char data[] = {'u', 'p', 'd', 'a', 't', 'e', 'd', ' ', 'd', 'a', 't', 'a'};
 
 static void downlink_info(uint8_t port, uint8_t flags, int16_t rssi, int8_t snr, uint8_t len,
 			  const uint8_t *data)
@@ -49,13 +56,26 @@ static void fuota_finished(void)
 	 * In an actual application the firmware should be rebooted here if
 	 * no important tasks are pending
 	 */
+
+	int rc = boot_request_upgrade(BOOT_UPGRADE_PERMANENT);
+    if (rc) {
+        printk("boot_request_upgrade failed: %d\n", rc);
+        return;
+    }
+
+    k_msleep(100);
+    sys_reboot(SYS_REBOOT_COLD);
+	
 }
 
 int main(void)
 {
+
+	printk("FUOTA app booting...\n");
+
 	const struct device *lora_dev;
 	struct lorawan_join_config join_cfg;
-	uint8_t dev_eui[] = LORAWAN_DEV_EUI;
+	uint8_t dev_eui[] = LORAWAN_DEV_EUI; 
 	uint8_t join_eui[] = LORAWAN_JOIN_EUI;
 	uint8_t app_key[] = LORAWAN_APP_KEY;
 	int ret;
@@ -120,8 +140,9 @@ int main(void)
 	 */
 	while (1) {
 		ret = lorawan_send(2, data, sizeof(data), LORAWAN_MSG_UNCONFIRMED);
+
 		if (ret == 0) {
-			LOG_INF("Hello World sent!");
+			LOG_INF("Updated sent!");
 		} else {
 			LOG_ERR("lorawan_send failed: %d", ret);
 		}
@@ -131,3 +152,6 @@ int main(void)
 
 	return 0;
 }
+
+
+

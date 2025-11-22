@@ -1,0 +1,28 @@
+// ADXL345 连接到 I2C3 总线
+// 硬件连线：CN8 Pin 5 (PB14) → ADXL345 SDA, CN8 Pin 6 (PB13) → ADXL345 SCL
+&i2c3 {
+    status = "okay";
+    pinctrl-0 = <&i2c3_scl_pb13 &i2c3_sda_pb14>;
+    pinctrl-names = "default";
+    clock-frequency = <100000>;
+    
+    adxl345@53 {
+        compatible = "adi,adxl345";
+        reg = <0x53>;
+        status = "okay";
+    };
+};
+
+&pinctrl {
+    i2c3_scl_pb13: i2c3_scl_pb13 {
+        pinmux = <STM32_PINMUX('B', 13, AF4)>;
+        bias-pull-up;
+        drive-open-drain;
+    };
+    
+    i2c3_sda_pb14: i2c3_sda_pb14 {
+        pinmux = <STM32_PINMUX('B', 14, AF4)>;
+        bias-pull-up;
+        drive-open-drain;
+    };
+};

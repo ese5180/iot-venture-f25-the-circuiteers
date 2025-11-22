@@ -1,0 +1,13 @@
+/* Overlay to enable I2C bus and bind BME280 on the Nucleo WL55JC1 board.
+ *
+ * Uses i2c2, which is already configured on this board.
+ * If your module uses address 0x77 instead of 0x76, change reg = <0x77>.
+ */
+
+&i2c2 {
+    bme280@77 {
+        compatible = "bosch,bme280";
+        reg = <0x77>;
+        status = "okay";
+    };
+};
