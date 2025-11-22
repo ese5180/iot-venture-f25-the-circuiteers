@@ -11,7 +11,7 @@
 /* 1000 msec = 1 sec */
 
 /* STEP 4.4 - Change LED timing to create a new image for DFU*/
-#define SLEEP_TIME_MS   1000
+#define SLEEP_TIME_MS   5000
 
 /* The devicetree node identifier for the "led0" alias. */
 #define LED0_NODE DT_ALIAS(led0)
