@@ -50,7 +50,7 @@ static const struct device *init_bme280(void)
         return NULL;
     }
 
-    LOG_INF("BME280: ✓ Initialized on I2C2 (PA11/PA12)");
+    LOG_INF("BME280: Initialized on I2C2 (PA11/PA12)");
     return bme280_dev;
 }
 
@@ -70,7 +70,7 @@ static const struct device *init_adxl345(void)
         return NULL;
     }
 
-    LOG_INF("ADXL345: ✓ Initialized on I2C3 (PB13/PB14)");
+    LOG_INF("ADXL345: Initialized on I2C3 (PB13/PB14)");
     return adxl345_dev;
 }
 
@@ -195,12 +195,12 @@ int main(void)
 
         /* Print results if both readings were successful */
         if (rc_bme280 == 0 && rc_adxl345 == 0) {
-            LOG_INF("[BME280] Temp: %s%d.%d°C | Pressure: %s%d.%d Pa | Humidity: %s%d.%d %%",
+            LOG_INF("[BME280] Temp: %s%d.%d Degree | Pressure: %s%d.%d Pa | Humidity: %s%d.%d %%",
                     PRIq_arg(temp_data.readings[0].temperature, 6, temp_data.shift),
                     PRIq_arg(press_data.readings[0].pressure, 6, press_data.shift),
                     PRIq_arg(hum_data.readings[0].humidity, 6, hum_data.shift));
             
-            LOG_INF("[ADXL345] Accel X: %d.%06d m/s² | Y: %d.%06d m/s² | Z: %d.%06d m/s²",
+            LOG_INF("[ADXL345] Accel X: %d.%06d m/s*s | Y: %d.%06d m/s*s | Z: %d.%06d m/s*s",
                     accel[0].val1, accel[0].val2,
                     accel[1].val1, accel[1].val2,
                     accel[2].val1, accel[2].val2);
