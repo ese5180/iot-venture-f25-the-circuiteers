@@ -6,7 +6,7 @@
 
 set -e
 
-echo "🔨 Running pre-push build verification..."
+echo "Running pre-push build verification..."
 
 # Colors for output
 RED='\033[0;31m'
