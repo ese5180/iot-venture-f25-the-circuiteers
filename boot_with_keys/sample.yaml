@@ -1,0 +1,15 @@
+sample:
+  description: UART Boot sample for STM32WL55 Nucleo board
+  name: STM32WL55 UART Boot Sample
+  
+common: 
+    sysbuild: true
+    build_only: true
+    skip: true
+    integration_platforms: 
+      - nucleo_wl55jc
+    platform_exclude:
+      - native_sim
+    
+tests:
+  stm32wl55.uart_boot: {}

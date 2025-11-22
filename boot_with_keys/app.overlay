@@ -1,0 +1,46 @@
+/* Application overlay for MCUmgr UART transport */
+/ {
+    chosen {
+        zephyr,uart-mcumgr = &lpuart1;
+    };
+};
+
+/* 
+ * Flash partition layout for STM32WL55JC (256KB total flash)
+ * Must match the MCUboot overlay partition layout
+ * Layout: 48KB boot + 96KB slot0 + 96KB slot1 + 16KB scratch = 256KB
+ */
+&flash0 {
+    /* Delete existing partitions node to avoid conflicts */
+    /delete-node/ partitions;
+    
+    partitions {
+        compatible = "fixed-partitions";
+        #address-cells = <1>;
+        #size-cells = <1>;
+
+        /* MCUboot bootloader - 48KB at base address */
+        boot_partition: partition@0 {
+            label = "mcuboot";
+            reg = <0x00000000 DT_SIZE_K(48)>;
+        };
+
+        /* Primary application slot (slot0) - 96KB */
+        slot0_partition: partition@c000 {
+            label = "image-0";
+            reg = <0x0000c000 DT_SIZE_K(96)>;
+        };
+
+        /* Secondary application slot (slot1) - 96KB */
+        slot1_partition: partition@24000 {
+            label = "image-1";
+            reg = <0x00024000 DT_SIZE_K(96)>;
+        };
+
+        /* Scratch area for image swapping - 16KB */
+        scratch_partition: partition@3c000 {
+            label = "image-scratch";
+            reg = <0x0003c000 DT_SIZE_K(16)>;
+        };
+    };
+};
