@@ -60,7 +60,7 @@ if [ -n "$LARGE_FILES" ]; then
 fi
 
 # Check for merge conflict markers (exclude hook files to avoid false positives)
-CONFLICT_MARKERS=$(echo "$STAGED_FILES" | grep -v "^hooks/pre-commit$\|^hooks/pre-push$\|^\.git/hooks/" | xargs grep -l "^<<<<<<< HEAD\|^=======\|^>>>>>>>" 2>/dev/null || true)
+CONFLICT_MARKERS=$(echo "$STAGED_FILES" | grep -vE "^hooks/(pre-commit|pre-push|test_hooks\.sh)$|^\.git/hooks/" | xargs grep -l "^<<<<<<< HEAD\|^=======\|^>>>>>>>" 2>/dev/null || true)
 if [ -n "$CONFLICT_MARKERS" ]; then
     echo -e "${RED}✗ Error: Merge conflict markers found in staged files${NC}"
     echo "$CONFLICT_MARKERS"
