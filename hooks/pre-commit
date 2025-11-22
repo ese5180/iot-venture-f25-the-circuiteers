@@ -74,6 +74,62 @@ if [ -n "$TRAILING_WS" ]; then
     echo "$TRAILING_WS"
 fi
 
+# Run Mock Unit Tests if sensors_test/tests_unit_mock exists
+TEST_DIR="sensors_test/tests_unit_mock"
+if [ -d "$TEST_DIR" ]; then
+    echo ""
+    echo -e "${YELLOW}🧪 Running Mock Unit Tests...${NC}"
+    echo "================================================"
+    
+    # Get repository root
+    REPO_ROOT="$(git rev-parse --show-toplevel)"
+    TEST_DIR_FULL="$REPO_ROOT/$TEST_DIR"
+    
+    # Check if cmake is available
+    if ! command -v cmake &> /dev/null; then
+        echo -e "${YELLOW}⚠ Warning: cmake not found. Skipping unit tests.${NC}"
+    elif ! command -v ctest &> /dev/null; then
+        echo -e "${YELLOW}⚠ Warning: ctest not found. Skipping unit tests.${NC}"
+    else
+        # Build tests if not already built
+        if [ ! -d "$TEST_DIR_FULL/build" ]; then
+            echo "Building mock tests..."
+            mkdir -p "$TEST_DIR_FULL/build"
+            cd "$TEST_DIR_FULL/build"
+            if ! cmake -DCMAKE_BUILD_TYPE=Release .. > /tmp/cmake_build.log 2>&1; then
+                echo -e "${RED}✗ CMake configuration failed${NC}"
+                echo "Check /tmp/cmake_build.log for details"
+                exit 1
+            fi
+            if ! cmake --build . > /tmp/cmake_build.log 2>&1; then
+                echo -e "${RED}✗ Test build failed${NC}"
+                echo "Check /tmp/cmake_build.log for details"
+                exit 1
+            fi
+        fi
+        
+        # Run tests
+        cd "$TEST_DIR_FULL/build"
+        if ctest --output-on-failure > /tmp/test_output.log 2>&1; then
+            echo -e "${GREEN}✓ All mock unit tests PASSED!${NC}"
+        else
+            echo -e "${RED}✗ Mock unit tests FAILED!${NC}"
+            echo "================================================"
+            echo "Test output:"
+            cat /tmp/test_output.log
+            echo ""
+            echo "Fix the failing tests before committing."
+            echo ""
+            echo "To run tests manually:"
+            echo "  cd $TEST_DIR_FULL/build"
+            echo "  ctest --output-on-failure"
+            echo ""
+            exit 1
+        fi
+        echo "================================================"
+    fi
+fi
+
 echo -e "${GREEN}✓ Pre-commit checks passed${NC}"
 exit 0
 

@@ -11,12 +11,19 @@ Runs before each commit to perform quick checks:
 - Warns about trailing whitespace
 - Warns about large files (>10MB)
 - Basic syntax checks for C files
+- **Runs Mock Unit Tests** from `sensors_test/tests_unit_mock/` (if available)
+  - Automatically builds tests if needed
+  - Blocks commit if tests fail
+  - Requires `cmake` and `ctest` to be installed
 
 ### Pre-push Hook
 Runs before pushing to remote repository:
 - Verifies that the main application builds successfully
 - Prevents pushing code that doesn't compile
 - Uses a 5-minute timeout to prevent hanging
+- **Runs Mock Unit Tests** from `sensors_test/tests_unit_mock/` (if available)
+  - Ensures all tests pass before pushing
+  - Requires `cmake` and `ctest` to be installed
 
 ## Installation
 
@@ -76,12 +83,14 @@ git push --no-verify
 ## Requirements
 
 ### Pre-commit Hook
-- No special requirements (runs basic checks)
+- No special requirements for basic checks
+- `cmake` and `ctest` required for unit tests (optional, tests skipped if not available)
 
 ### Pre-push Hook
 - Zephyr environment must be initialized (`source zephyr/zephyr-env.sh`)
 - `west` tool must be installed and in PATH
 - Zephyr SDK must be installed
+- `cmake` and `ctest` required for unit tests (optional, tests skipped if not available)
 
 ## Troubleshooting
 
