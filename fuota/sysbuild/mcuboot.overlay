@@ -12,7 +12,7 @@
 /* 
  * Flash partition layout for STM32WL55JC (256KB total flash)
  * MCUboot bootloader starts at 0x08000000 (flash base address)
- * Layout: 36KB boot + 112KB slot0 + 92KB slot1 + 8KB storage + 8KB scratch = 256KB
+ * Layout: 36KB boot + 102KB slot0 + 102KB slot1 + 8KB storage + 8KB scratch = 256KB
  */
 &flash0 {
     /* Delete existing partitions node to avoid conflicts */
@@ -29,16 +29,16 @@
             reg = <0x00000000 DT_SIZE_K(36)>;
         };
 
-        /* Primary application slot (slot0) - 112KB */
+        /* Primary application slot (slot0) - 102KB */
         slot0_partition: partition@9000 {
             label = "image-0";
-            reg = <0x00009000 DT_SIZE_K(112)>;
+            reg = <0x00009000 DT_SIZE_K(102)>;
         };
 
-        /* Secondary application slot (slot1) - 92KB */
-        slot1_partition: partition@25000 {
+        /* Secondary application slot (slot1) - 102KB */
+        slot1_partition: partition@22800 {
             label = "image-1";
-            reg = <0x00025000 DT_SIZE_K(92)>;
+            reg = <0x00022800 DT_SIZE_K(102)>;
         };
 
         /* Storage for NVS (LoRaWAN settings) - 8KB */
