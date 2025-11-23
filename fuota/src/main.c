@@ -34,9 +34,9 @@ char data[] = {'u', 'p', 'd', 'a', 't', 'e', 'd', ' ', 'd', 'a', 't', 'a'};
 static void downlink_info(uint8_t port, uint8_t flags, int16_t rssi, int8_t snr, uint8_t len,
 			  const uint8_t *data)
 {
-	LOG_INF("Received from port %d, flags %d, RSSI %ddB, SNR %ddBm", port, flags, rssi, snr);
+	LOG_ERR("Received from port %d, flags %d, RSSI %ddB, SNR %ddBm", port, flags, rssi, snr);
 	if (data) {
-		LOG_HEXDUMP_INF(data, len, "Payload: ");
+		LOG_HEXDUMP_ERR(data, len, "Payload: ");
 	}
 }
 
@@ -45,12 +45,12 @@ static void datarate_changed(enum lorawan_datarate dr)
 	uint8_t unused, max_size;
 
 	lorawan_get_payload_sizes(&unused, &max_size);
-	LOG_INF("New Datarate: DR %d, Max Payload %d", dr, max_size);
+	LOG_ERR("New Datarate: DR %d, Max Payload %d", dr, max_size);
 }
 
 static void fuota_finished(void)
 {
-	LOG_INF("FUOTA finished. Reset device to apply firmware upgrade.");
+	LOG_ERR("FUOTA finished. Reset device to apply firmware upgrade.");
 
 	/*
 	 * In an actual application the firmware should be rebooted here if
@@ -106,7 +106,7 @@ int main(void)
 	join_cfg.otaa.app_key = app_key;
 	join_cfg.otaa.nwk_key = app_key;
 
-	LOG_INF("Joining network over OTAA");
+	LOG_ERR("Joining network over OTAA");
 	ret = lorawan_join(&join_cfg);
 	if (ret < 0) {
 		LOG_ERR("lorawan_join_network failed: %d", ret);
@@ -142,7 +142,7 @@ int main(void)
 		ret = lorawan_send(2, data, sizeof(data), LORAWAN_MSG_UNCONFIRMED);
 
 		if (ret == 0) {
-			LOG_INF("Updated sent!");
+			LOG_ERR("Updated sent!");
 		} else {
 			LOG_ERR("lorawan_send failed: %d", ret);
 		}
