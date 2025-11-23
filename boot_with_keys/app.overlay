@@ -8,7 +8,7 @@
 /* 
  * Flash partition layout for STM32WL55JC (256KB total flash)
  * Must match the MCUboot overlay partition layout
- * Layout: 48KB boot + 96KB slot0 + 96KB slot1 + 16KB scratch = 256KB
+ * Layout: 36KB boot + 102KB slot0 + 102KB slot1 + 8KB storage + 8KB scratch = 256KB
  */
 &flash0 {
     /* Delete existing partitions node to avoid conflicts */
@@ -19,28 +19,34 @@
         #address-cells = <1>;
         #size-cells = <1>;
 
-        /* MCUboot bootloader - 48KB at base address */
+        /* MCUboot bootloader - 36KB at base address (minimum required) */
         boot_partition: partition@0 {
             label = "mcuboot";
-            reg = <0x00000000 DT_SIZE_K(48)>;
+            reg = <0x00000000 DT_SIZE_K(36)>;
         };
 
-        /* Primary application slot (slot0) - 96KB */
-        slot0_partition: partition@c000 {
+        /* Primary application slot (slot0) - 102KB */
+        slot0_partition: partition@9000 {
             label = "image-0";
-            reg = <0x0000c000 DT_SIZE_K(96)>;
+            reg = <0x00009000 DT_SIZE_K(102)>;
         };
 
-        /* Secondary application slot (slot1) - 96KB */
-        slot1_partition: partition@24000 {
+        /* Secondary application slot (slot1) - 102KB */
+        slot1_partition: partition@22800 {
             label = "image-1";
-            reg = <0x00024000 DT_SIZE_K(96)>;
+            reg = <0x00022800 DT_SIZE_K(102)>;
         };
 
-        /* Scratch area for image swapping - 16KB */
-        scratch_partition: partition@3c000 {
+        /* Storage partition - 8KB */
+        storage_partition: partition@3c000 {
+            label = "storage";
+            reg = <0x0003c000 DT_SIZE_K(8)>;
+        };
+
+        /* Scratch area for image swapping - 8KB */
+        scratch_partition: partition@3e000 {
             label = "image-scratch";
-            reg = <0x0003c000 DT_SIZE_K(16)>;
+            reg = <0x0003e000 DT_SIZE_K(8)>;
         };
     };
 };
