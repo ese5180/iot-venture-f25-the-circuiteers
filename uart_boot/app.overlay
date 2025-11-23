@@ -1,0 +1,6 @@
+/* Application overlay for MCUmgr UART transport */
+/ {
+    chosen {
+        zephyr,uart-mcumgr = &lpuart1;
+    };
+};
