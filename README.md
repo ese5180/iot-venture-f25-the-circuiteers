@@ -176,7 +176,106 @@ The software system manages distributed sensor data collection, wireless transmi
 
 **SRS 03** – The gateway shall aggregate data from the vending machine and forward processed metrics to the cloud platform via MQTT/HTTPS every 5 minutes.
 
-**SRS 04** – The software shall maintain a local data buffer capable of storing 24 hours of sensor readings in case of communication failure, with automatic retransmission upon connection restoration. 
+**SRS 04** – The software shall maintain a local data buffer capable of storing 24 hours of sensor readings in case of communication failure, with automatic retransmission upon connection restoration.
+
+## CI/CD Pipeline
+
+### Continuous Integration (CI) Pipeline
+
+The project uses GitHub Actions for continuous integration to automatically build and verify firmware for all target platforms.
+
+**Location:** `.github/workflows/ci.yml`
+
+**What it does:**
+- Automatically builds firmware for all applications on every push and pull request
+- Builds for target board: `nucleo_wl55jc` (STM32WL55xx)
+- Applications built:
+  - `apps/` - Main LoRaWAN application for edge nodes
+  - `fuota/` - Firmware update over the air application
+  - `boot_with_keys/` - Secure bootloader with keys
+  - `scratch_test/` - Scratch test application
+  - `uart_boot/` - UART bootloader application
+- Verifies build artifacts are generated correctly
+- Uploads build artifacts for download (retained for 7 days)
+
+**View CI Status:**
+- Go to the "Actions" tab in GitHub to see build status
+- Green checkmark = all builds successful
+- Red X = one or more builds failed
+
+**Benefits:**
+- Catches compilation errors before merging code
+- Ensures code builds on clean environment
+- Provides downloadable firmware binaries
+- Documents build process for team members
+
+## Git Hooks
+
+Git hooks are configured to maintain code quality and catch issues early in the development process.
+
+**Location:** `hooks/` directory
+
+### Available Hooks
+
+#### Pre-commit Hook
+Runs automatically before each commit to perform quick checks:
+- Detects merge conflict markers (blocks commit)
+- Warns about TODO/FIXME comments
+- Warns about trailing whitespace
+- Warns about large files (>10MB)
+- Basic syntax validation for C files
+- **Runs Mock Unit Tests** from `sensors_test/tests_unit_mock/` (if available)
+  - Automatically builds tests if needed
+  - Blocks commit if tests fail
+  - Requires `cmake` and `ctest` to be installed
+
+#### Pre-push Hook
+Runs automatically before pushing to remote repository:
+- Verifies that the main application builds successfully
+- Prevents pushing code that doesn't compile
+- Uses 5-minute timeout to prevent hanging
+- **Runs Mock Unit Tests** from `sensors_test/tests_unit_mock/` (if available)
+  - Ensures all tests pass before pushing
+  - Requires `cmake` and `ctest` to be installed
+
+### Installation
+
+**Quick Install:**
+```bash
+chmod +x hooks/install.sh
+./hooks/install.sh
+```
+
+**Manual Install:**
+```bash
+cp hooks/pre-commit .git/hooks/pre-commit
+cp hooks/pre-push .git/hooks/pre-push
+chmod +x .git/hooks/pre-commit
+chmod +x .git/hooks/pre-push
+```
+
+### Usage
+
+Hooks run automatically:
+- `git commit` → triggers pre-commit hook
+- `git push` → triggers pre-push hook
+
+To skip hooks (not recommended):
+```bash
+git commit --no-verify
+git push --no-verify
+```
+
+### Requirements
+
+- **Pre-commit:** 
+  - No special requirements for basic checks
+  - `cmake` and `ctest` required for unit tests (optional, tests skipped if not available)
+- **Pre-push:** 
+  - Requires Zephyr environment (`source zephyr/zephyr-env.sh`) and `west` tool for build verification
+  - `cmake` and `ctest` required for unit tests (optional, tests skipped if not available)
+
+For detailed documentation, see [hooks/README.md](hooks/README.md). 
 
 
 ## Concept Refinement 
@@ -311,6 +410,12 @@ The software system manages distributed sensor data collection, wireless transmi
 **SRS 03** – The gateway shall aggregate data from the vending machine and forward processed metrics to the cloud platform via MQTT/HTTPS every 5 minutes.
 
 **SRS 04** – The software shall maintain a local data buffer capable of storing 24 hours of sensor readings in case of communication failure, with automatic retransmission upon connection restoration.
+
+## Concept Refinement 
+
+The vending machine industry represents a $22-25 billion global market with a critical need for smart health monitoring systems, as traditional maintenance approaches are bleeding operators dry with hidden costs that eliminate profits for 73% of independent vending operators. Current maintenance expenses range from $100-500 annually per machine, with monthly checks costing $50-100 and service incidents adding $50-200 each time, creating a maintenance burden that constitutes up to 15% of total operational costs.
+VendGuard is a plug-and-play IoT solution that transforms maintenance from reactive to predictive, using sensors to monitor critical vending machine components in real-time—including power draw, temperature, dispensing motor function, and cooling system performance. By identifying potential failures before they occur, VendGuard reduces maintenance costs by up to 25%, prevents emergency repairs, optimizes service routes, and extends machine lifespan.
+For a mid-sized vending operator with 100 machines, VendGuard can provide annual maintenance savings of $15,000 ($600/machine × 100 machines × 25% reduction), while simultaneously increasing machine uptime, reducing product spoilage, and improving customer satisfaction.
 
 ### Power Budget, Hardware and Software BOM
 

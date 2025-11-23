@@ -1,0 +1,50 @@
+/{
+    aliases{
+        mcuboot-button0 = &user_button_1;
+        mcuboot-led0 = &blue_led_1;
+    };
+};
+
+/* 
+ * Flash partition layout for STM32WL55JC (256KB total flash)
+ * Optimized for MCUboot dual-slot with scratch area
+ */
+&flash0 {
+    partitions {
+        compatible = "fixed-partitions";
+        #address-cells = <1>;
+        #size-cells = <1>;
+
+        /* MCUboot bootloader - 32KB */
+        boot_partition: partition@0 {
+            label = "mcuboot";
+            reg = <0x00000000 DT_SIZE_K(32)>;
+        };
+
+        /* Primary application slot (slot0) - 104KB */
+        slot0_partition: partition@8000 {
+            label = "image-0";
+            reg = <0x00008000 DT_SIZE_K(104)>;
+        };
+
+        /* Secondary application slot (slot1) - 104KB */
+        slot1_partition: partition@22000 {
+            label = "image-1";
+            reg = <0x00022000 DT_SIZE_K(104)>;
+        };
+
+        /* Scratch area for image swapping - 16KB */
+        scratch_partition: partition@3c000 {
+            label = "image-scratch";
+            reg = <0x0003c000 DT_SIZE_K(16)>;
+        };
+
+        /* Optional: Storage area for persistent data - 0KB (can be added if needed)
+         * If you need storage, reduce slot sizes to make room
+         * storage_partition: partition@40000 {
+         *     label = "storage";
+         *     reg = <0x00040000 DT_SIZE_K(16)>;
+         * };
+         */
+    };
+};

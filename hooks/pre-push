@@ -1,0 +1,125 @@
+#!/bin/bash
+#
+# Pre-push hook for VendGuard project
+# Performs build verification before allowing a push
+#
+
+set -e
+
+echo "Running pre-push build verification..."
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
+
+# Check if we're in a git repository
+if ! git rev-parse --git-dir > /dev/null 2>&1; then
+    echo -e "${RED}Error: Not in a git repository${NC}"
+    exit 1
+fi
+
+# Check if Zephyr environment is available
+if [ -z "$ZEPHYR_BASE" ]; then
+    echo -e "${YELLOW}⚠ Warning: ZEPHYR_BASE not set. Skipping build verification.${NC}"
+    echo "To enable build checks, source zephyr/zephyr-env.sh first"
+    exit 0
+fi
+
+# Check if west is available
+if ! command -v west &> /dev/null; then
+    echo -e "${YELLOW}⚠ Warning: west not found. Skipping build verification.${NC}"
+    exit 0
+fi
+
+# Get the main application directory
+MAIN_APP="apps"
+BOARD="nucleo_wl55jc"
+
+if [ ! -d "$MAIN_APP" ]; then
+    echo -e "${YELLOW}⚠ Warning: $MAIN_APP directory not found. Skipping build.${NC}"
+    exit 0
+fi
+
+echo "Building $MAIN_APP for $BOARD..."
+
+# Try to build (with timeout to prevent hanging)
+if timeout 300 west build -p always -b "$BOARD" "$MAIN_APP" > /tmp/build.log 2>&1; then
+    if [ -f "build/zephyr/zephyr.elf" ]; then
+        echo -e "${GREEN}✓ Build verification passed${NC}"
+    else
+        echo -e "${RED}✗ Build completed but zephyr.elf not found${NC}"
+        exit 1
+    fi
+else
+    BUILD_EXIT_CODE=$?
+    if [ $BUILD_EXIT_CODE -eq 124 ]; then
+        echo -e "${RED}✗ Build timed out after 5 minutes${NC}"
+    else
+        echo -e "${RED}✗ Build failed${NC}"
+        echo "Last 20 lines of build log:"
+        tail -n 20 /tmp/build.log || true
+    fi
+    exit 1
+fi
+
+# Run Mock Unit Tests if sensors_test/tests_unit_mock exists
+TEST_DIR="sensors_test/tests_unit_mock"
+if [ -d "$TEST_DIR" ]; then
+    echo ""
+    echo -e "${YELLOW}🧪 Running Mock Unit Tests (pre-push verification)...${NC}"
+    echo "================================================"
+    
+    # Get repository root
+    REPO_ROOT="$(git rev-parse --show-toplevel)"
+    TEST_DIR_FULL="$REPO_ROOT/$TEST_DIR"
+    
+    # Check if cmake is available
+    if ! command -v cmake &> /dev/null; then
+        echo -e "${YELLOW}⚠ Warning: cmake not found. Skipping unit tests.${NC}"
+    elif ! command -v ctest &> /dev/null; then
+        echo -e "${YELLOW}⚠ Warning: ctest not found. Skipping unit tests.${NC}"
+    else
+        # Build tests if not already built
+        if [ ! -d "$TEST_DIR_FULL/build" ]; then
+            echo "Building mock tests..."
+            mkdir -p "$TEST_DIR_FULL/build"
+            cd "$TEST_DIR_FULL/build"
+            if ! cmake -DCMAKE_BUILD_TYPE=Release .. > /tmp/cmake_build.log 2>&1; then
+                echo -e "${RED}✗ CMake configuration failed${NC}"
+                echo "Check /tmp/cmake_build.log for details"
+                exit 1
+            fi
+            if ! cmake --build . > /tmp/cmake_build.log 2>&1; then
+                echo -e "${RED}✗ Test build failed${NC}"
+                echo "Check /tmp/cmake_build.log for details"
+                exit 1
+            fi
+        fi
+        
+        # Run tests
+        cd "$TEST_DIR_FULL/build"
+        if ctest --output-on-failure > /tmp/test_output.log 2>&1; then
+            echo -e "${GREEN}✓ All mock unit tests PASSED!${NC}"
+        else
+            echo -e "${RED}✗ Mock unit tests FAILED!${NC}"
+            echo "================================================"
+            echo "Test output:"
+            cat /tmp/test_output.log
+            echo ""
+            echo "Fix the failing tests before pushing."
+            echo ""
+            echo "To run tests manually:"
+            echo "  cd $TEST_DIR_FULL/build"
+            echo "  ctest --output-on-failure"
+            echo ""
+            exit 1
+        fi
+        echo "================================================"
+    fi
+fi
+
+echo -e "${GREEN}✓ Pre-push verification passed${NC}"
+exit 0
+
