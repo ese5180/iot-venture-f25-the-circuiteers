@@ -29,6 +29,13 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Cache Zephyr SDK
+        uses: actions/cache@v4
+        id: cache-sdk
+        with:
+          path: zephyr-sdk-0.17.2
+          key: zephyr-sdk-0.17.2-linux-x86_64
+
       - name: Install west and dependencies
         run: |
           pip3 install west
@@ -52,13 +59,33 @@ jobs:
           find . -maxdepth 2 -name "zephyr*" -type d
 
       - name: Install Zephyr SDK
+        if: steps.cache-sdk.outputs.cache-hit != 'true'
         run: |
-          wget https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v0.17.2/zephyr-sdk-0.17.2_linux-x86_64.tar.xz
+          # Download with retry and progress
+          echo "Downloading Zephyr SDK..."
+          wget --timeout=30 --tries=3 --progress=dot:giga \
+            https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v0.17.2/zephyr-sdk-0.17.2_linux-x86_64.tar.xz
+          
+          # Extract with progress
+          echo "Extracting Zephyr SDK..."
           tar xf zephyr-sdk-0.17.2_linux-x86_64.tar.xz
+          
+          # Clean up archive
+          rm zephyr-sdk-0.17.2_linux-x86_64.tar.xz
+
+      - name: Setup Zephyr SDK
+        run: |
+          # Setup SDK (always run, even from cache)
           cd zephyr-sdk-0.17.2
           ./setup.sh -h -c
           cd ..
+          
+          # Set environment
           echo "ZEPHYR_SDK_INSTALL_DIR=$PWD/zephyr-sdk-0.17.2" >> $GITHUB_ENV
+          
+          # Verify installation
+          ls -la zephyr-sdk-0.17.2/
+          echo "SDK setup complete"
 
       - name: Build ${{ matrix.app.name }} for ${{ matrix.app.board }}
         run: |
