@@ -557,6 +557,7 @@ For a mid-sized vending operator with 100 machines, VendGuard can provide annual
 
 Link: https://docs.google.com/spreadsheets/d/1TTWYfVYijEID34pga0s4eGWvey3Sqpn2U45rw3sVCuY/edit?usp=sharing
 
+
 ## Fleet Management
 
 Fleet management email alert Video: 
