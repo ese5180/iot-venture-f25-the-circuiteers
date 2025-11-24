@@ -558,10 +558,10 @@ For a mid-sized vending operator with 100 machines, VendGuard can provide annual
 Link: https://docs.google.com/spreadsheets/d/1TTWYfVYijEID34pga0s4eGWvey3Sqpn2U45rw3sVCuY/edit?usp=sharing
 
 
-## Fleet Management
+## Deliverables
 
 Fleet management email alert Video: 
 https://drive.google.com/file/d/1wrj_DSsPnJNEvwQ6pkhyjpANsUDaOeGC/view?usp=sharing
 
 OTA with LoRaWAN Video:
-https://drive.google.com/file/d/1emTO7qr63mhZakDVMMib-nAGTBKjZBDv/view?usp=sharing
+https://drive.google.com/file/d/1f_kNWFBVPYnf2AP8PctA-6Hh7hO_H4uW/view?usp=sharing
