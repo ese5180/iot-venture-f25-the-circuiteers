@@ -36,9 +36,20 @@ jobs:
 
       - name: Initialize Zephyr workspace
         run: |
+          echo "Current directory contents:"
+          ls -la
+          echo "Initializing west workspace..."
           west init -l . --mf west.yml
+          echo "Workspace after init:"
+          ls -la
+          echo "Updating workspace..."
           west update -o=--filter=tree:0 || west update --fetch-opt=--filter=tree:0
+          echo "Workspace after update:"
+          ls -la
+          echo "Exporting Zephyr environment..."
           west zephyr-export
+          echo "Final workspace structure:"
+          find . -maxdepth 2 -name "zephyr*" -type d
 
       - name: Install Zephyr SDK
         run: |
@@ -51,7 +62,16 @@ jobs:
 
       - name: Build ${{ matrix.app.name }} for ${{ matrix.app.board }}
         run: |
-          source zephyr/zephyr-env.sh
+          # Find and source the Zephyr environment
+          if [ -f "zephyr/zephyr-env.sh" ]; then
+            source zephyr/zephyr-env.sh
+          elif [ -f "iot-venture-f25-the-circuiteers/zephyr/zephyr-env.sh" ]; then
+            source iot-venture-f25-the-circuiteers/zephyr/zephyr-env.sh
+          else
+            echo "Looking for zephyr-env.sh..."
+            find . -name "zephyr-env.sh" -type f
+            # Use west without sourcing (should work with west zephyr-export)
+          fi
           west build -p always -b ${{ matrix.app.board }} ${{ matrix.app.name }}
         continue-on-error: false
 
