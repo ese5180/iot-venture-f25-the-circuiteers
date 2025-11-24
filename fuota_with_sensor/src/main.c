@@ -193,23 +193,22 @@ static int pack_sensor_payload(struct sensor_q31_data *temp_data,
                                struct sensor_value accel[3],
                                uint8_t *payload)
 {
-    /* Convert Q31 sensor values to float (Q31 shift = 31 bits) */
-    float temp_c = (float)temp_data->readings[0].temperature / (1LL << 31);
-    float humidity = (float)hum_data->readings[0].humidity / (1LL << 31);
-    float pressure = (float)press_data->readings[0].pressure / (1LL << 31);
+    /* Convert Q31 sensor values to fixed-point x1000 without float */
+    /* Q31 means value is scaled by 2^31. */
+    /* We want (value / 2^31) * 1000 => (value * 1000) / 2^31 */
+    /* Use int64_t to prevent overflow during multiplication */
     
-    /* Convert standard sensor values to float */
-    float accel_x_f = sensor_value_to_double(&accel[0]);
-    float accel_y_f = sensor_value_to_double(&accel[1]);
-    float accel_z_f = sensor_value_to_double(&accel[2]);
+    int16_t temp_x1000 = (int16_t)(((int64_t)temp_data->readings[0].temperature * 1000) / 2147483648LL);
+    int16_t hum_x1000 = (int16_t)(((int64_t)hum_data->readings[0].humidity * 1000) / 2147483648LL);
+    int16_t press_x1000 = (int16_t)(((int64_t)press_data->readings[0].pressure * 1000) / 2147483648LL);
 
-    /* Convert to fixed-point integers */
-    int16_t temp_x1000 = (int16_t)(temp_c * 1000);      // -327.68 ~ +327.67 °C
-    int16_t hum_x1000 = (int16_t)(humidity * 1000);   // 0 ~ 655.35 %
-    int16_t press_x1000 = (int16_t)(pressure * 1000);   // e.g. 1013.2 hPa → 10132
-    int16_t accel_x_1000 = (int16_t)(accel_x_f * 1000);  // X acceleration * 1000
-    int16_t accel_y_1000 = (int16_t)(accel_y_f * 1000);  // Y acceleration * 1000
-    int16_t accel_z_1000 = (int16_t)(accel_z_f * 1000);  // Z acceleration * 1000
+    /* Convert standard sensor values to fixed-point x1000 without float */
+    /* sensor_value has val1 (int) and val2 (micro, /1,000,000) */
+    /* val * 1000 = val1 * 1000 + val2 / 1000 */
+    
+    int16_t accel_x_1000 = (int16_t)(accel[0].val1 * 1000 + accel[0].val2 / 1000);
+    int16_t accel_y_1000 = (int16_t)(accel[1].val1 * 1000 + accel[1].val2 / 1000);
+    int16_t accel_z_1000 = (int16_t)(accel[2].val1 * 1000 + accel[2].val2 / 1000);
 
     /* Pack into binary payload (12 bytes) */
     payload[0] = (uint8_t)(temp_x1000 >> 8);

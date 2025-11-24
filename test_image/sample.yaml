@@ -1,0 +1,14 @@
+sample:
+  name: Test Image Blinky with MCUboot
+  description: Simple LED blinky application with MCUboot signing and DFU support
+common:
+  tags: gpio led mcuboot dfu
+  depends_on: gpio
+  harness: console
+  harness_config:
+    type: one_line
+    regex:
+      - "LED toggled"
+tests:
+  sample.basic.blinky:
+    platform_allow: nucleo_wl55jc
