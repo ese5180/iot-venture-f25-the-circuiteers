@@ -230,6 +230,7 @@ graph TB
     RUN --> UPDATE
 ```
 
+
 ### Bootloader and Application Sizes
 
 **MCUboot Bootloader:**
