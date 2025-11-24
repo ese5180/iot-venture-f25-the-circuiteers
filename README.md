@@ -178,6 +178,141 @@ The software system manages distributed sensor data collection, wireless transmi
 
 **SRS 04** – The software shall maintain a local data buffer capable of storing 24 hours of sensor readings in case of communication failure, with automatic retransmission upon connection restoration.
 
+## Secure Firmware Updates
+
+
+### Extra Credit (EC1): Implement serial recovery with signed images over UART through the bootloader as a failsafe backup
+
+Screenshot of the successful implementation of serial recovery with signed images over UART:
+
+![image1](images/uart_boot.jpg)
+
+
+For the code implementation, refer to the `boot_with_keys/` directory.
+
+
+### Bootloading Process Overview
+
+Our VendGuard system implements a secure dual-slot bootloading architecture using MCUboot with cryptographic signature verification and LoRaWAN-based Firmware Update Over The Air (FUOTA) capabilities.
+
+#### Bootloading Architecture Diagram
+
+```mermaid
+graph TB
+    subgraph "STM32WL55JC Flash Memory (256KB)"
+        BOOT["MCUboot Bootloader<br/>36KB @ 0x0000"]
+        SLOT0["Primary App Slot (slot0)<br/>102KB @ 0x9000"]
+        SLOT1["Secondary App Slot (slot1)<br/>102KB @ 0x22800"]
+        STORAGE["Storage Partition<br/>8KB @ 0x3C000"]
+        SCRATCH["Scratch Area<br/>8KB @ 0x3E000"]
+    end
+    
+    subgraph "Boot Process Flow"
+        POWER["Power On/Reset"] --> BOOT
+        BOOT --> VERIFY["Verify Slot0<br/>Signature"]
+        VERIFY -->|Valid| RUN["Run Application<br/>from Slot0"]
+        VERIFY -->|Invalid| RECOVERY["Serial Recovery<br/>Mode (UART)"]
+        
+        UPDATE["FUOTA Update<br/>Available"] --> DOWNLOAD["Download to Slot1<br/>via LoRaWAN"]
+        DOWNLOAD --> VALIDATE["Validate New<br/>Image Signature"]
+        VALIDATE -->|Valid| SWAP["Mark for Swap<br/>& Reboot"]
+        VALIDATE -->|Invalid| REJECT["Reject Update"]
+        SWAP --> BOOT
+    end
+    
+    subgraph "FUOTA Process"
+        LORAWAN["LoRaWAN Network"] --> FRAG["Fragmented<br/>Data Transport"]
+        FRAG --> REASSEMBLE["Reassemble<br/>Firmware Image"]
+        REASSEMBLE --> SLOT1
+    end
+    
+    LORAWAN -.-> UPDATE
+    RUN --> UPDATE
+```
+
+### Bootloader and Application Sizes
+
+**MCUboot Bootloader:**
+- **Size**: 36,284 bytes (35.4 KB)
+- **Allocated Space**: 36 KB (36,864 bytes)
+- **Location**: Flash base address 0x08000000
+
+**Application Code:**
+- **Size**: 35,660 bytes (34.8 KB) for basic LED blink application
+- **Allocated Space**: 102 KB (104,448 bytes) per slot
+- **Utilization**: 34.1% of allocated space (allows room for sensor integration and LoRaWAN stack)
+- **Location**: Slot0 at 0x08009000, Slot1 at 0x08022800
+
+### Firmware Update Process
+
+#### Download Mechanism
+Our FUOTA implementation uses **LoRaWAN (915 MHz ISM band)** as the wireless communication protocol, specifically LoRaWAN 1.0.4 with OTAA (Over-the-Air Activation) for secure device authentication. The system employs the Fragmented Data Transport service to handle large firmware images efficiently, and switches to Class C during multicast sessions for efficient bulk data transfer to multiple devices simultaneously.
+
+#### Why LoRaWAN for FUOTA?
+
+We chose LoRaWAN over other wireless methods because:
+
+1. **Long Range**: Up to 2km coverage in urban environments, ideal for distributed vending machines
+2. **Low Power**: Battery-operated edge devices can receive updates without frequent charging
+3. **Multicast Capability**: Single transmission can update multiple devices simultaneously
+4. **Standardized FUOTA**: Built-in LoRaWAN services handle fragmentation, reassembly, and scheduling
+5. **Existing Infrastructure**: Leverages the same communication channel used for sensor data
+
+#### Firmware Storage Location
+
+Downloaded firmware images are stored in:
+- **Primary Location**: Slot1 (secondary application slot) at flash address 0x08022800
+- **Size**: 102 KB maximum per image
+- **Temporary Storage**: 8 KB scratch area at 0x0003E000 for image swapping operations
+
+### Failure Handling Features
+
+Our system implements multiple layers of protection against firmware update failures:
+
+#### 1. Cryptographic Signature Verification
+- **Algorithm**: ECDSA P-256 with SHA-256
+- **Key Management**: Private key stored securely, public key embedded in bootloader
+- **Validation Points**: 
+  - Before storing downloaded image in Slot1
+  - Before swapping images during boot process
+  - **Protection**: Prevents installation of unsigned or tampered firmware
+
+#### 2. Image Integrity Checks
+- **CRC Validation**: Fragmented transport includes CRC checks for each fragment
+- **Hash Verification**: Complete image hash validation after reassembly
+- **Size Validation**: Ensures image fits within allocated slot space
+- **Protection**: Detects corrupted downloads or transmission errors
+
+#### 3. Dual-Slot Failsafe Architecture
+- **Swap Mechanism**: Uses scratch area for atomic image swapping
+- **Rollback Protection**: Original firmware remains in Slot0 until new image is verified
+- **Boot Validation**: MCUboot validates Slot0 signature on every boot
+- **Protection**: System can always boot from known-good firmware
+
+#### 4. Serial Recovery Mode
+- **Activation**: Automatic entry when no valid image found in Slot0
+- **Interface**: UART-based recovery protocol
+- **LED Indication**: Blue LED indicates recovery mode active
+- **Capabilities**: 
+  - Emergency firmware upload via UART
+  - Image validation and installation
+  - **Protection**: Provides recovery path when both slots are corrupted
+
+#### 5. Upgrade Confirmation
+- **Test Boot**: New firmware runs in "test" mode initially
+- **Confirmation Required**: Application must confirm successful operation
+- **Automatic Rollback**: Reverts to previous firmware if confirmation not received
+- **Timeout**: Configurable timeout period for confirmation
+- **Protection**: Prevents permanent installation of faulty code with valid signatures
+
+
+### Security Features
+
+- **Encrypted Communication**: LoRaWAN AES-128 encryption for all transmissions
+- **Device Authentication**: OTAA with unique device keys prevents unauthorized updates
+- **Replay Protection**: LoRaWAN frame counters prevent replay attacks
+- **Code Signing**: ECDSA P-256 signatures ensure firmware authenticity and integrity
+
 ## CI/CD Pipeline
 
 ### Continuous Integration (CI) Pipeline
