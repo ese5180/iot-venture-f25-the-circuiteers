@@ -556,3 +556,11 @@ For a mid-sized vending operator with 100 machines, VendGuard can provide annual
 ### Power Budget, Hardware and Software BOM
 
 Link: https://docs.google.com/spreadsheets/d/1TTWYfVYijEID34pga0s4eGWvey3Sqpn2U45rw3sVCuY/edit?usp=sharing
+
+## Fleet Management
+
+Fleet management email alert Video: 
+https://drive.google.com/file/d/1wrj_DSsPnJNEvwQ6pkhyjpANsUDaOeGC/view?usp=sharing
+
+OTA with LoRaWAN Video:
+https://drive.google.com/file/d/1emTO7qr63mhZakDVMMib-nAGTBKjZBDv/view?usp=sharing
