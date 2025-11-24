@@ -17,18 +17,6 @@ jobs:
           - name: apps
             board: nucleo_wl55jc
             description: "Main LoRaWAN application for edge nodes"
-          - name: fuota
-            board: nucleo_wl55jc
-            description: "Firmware update over the air application"
-          - name: boot_with_keys
-            board: nucleo_wl55jc
-            description: "Secure bootloader with keys"
-          - name: scratch_test
-            board: nucleo_wl55jc
-            description: "Scratch test application"
-          - name: uart_boot
-            board: nucleo_wl55jc
-            description: "UART bootloader application"
 
     steps:
       - name: Checkout repository
@@ -48,7 +36,7 @@ jobs:
 
       - name: Initialize Zephyr workspace
         run: |
-          west init -o=--filter=tree:0
+          west init -l . --mf west.yml
           west update -o=--filter=tree:0 || west update --fetch-opt=--filter=tree:0
           west zephyr-export
 

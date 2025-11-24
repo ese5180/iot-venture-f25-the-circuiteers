@@ -23,7 +23,7 @@ This Docker-based development environment is configured for developing embedded 
 
 3. **Inside the container, initialize Zephyr (first time only):** 
    ```bash
-   west init -o=--filter=tree:0
+   west init -l . --mf west.yml
    west update -o=--filter=tree:0
    # If update fails due to network issues, retry:
    west update --fetch-opt=--filter=tree:0
@@ -66,7 +66,7 @@ docker compose run --rm team8-circuiteers lsusb
 
 2. **Initialize Zephyr workspace (first time only):**
    ```bash
-   west init -o=--filter=tree:0
+   west init -l . --mf west.yml
    west update -o=--filter=tree:0
    # If update fails due to network issues, retry:
    west update --fetch-opt=--filter=tree:0
