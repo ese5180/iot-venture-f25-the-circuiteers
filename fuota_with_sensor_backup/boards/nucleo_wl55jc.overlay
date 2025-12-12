@@ -1,0 +1,90 @@
+/* 
+ * Devicetree overlay for dual sensor setup on Nucleo WL55JC1 with FUOTA support
+ * - BME280 on I2C2 (PA11/PA12) - Temperature, Pressure, Humidity
+ * - ADXL345 on I2C3 (PB13/PB14) - Accelerometer
+ * - Flash partition layout for FUOTA
+ */
+
+/* BME280 on I2C2 (pre-configured on this board) */
+&i2c2 {
+    bme280@77 {
+        compatible = "bosch,bme280";
+        reg = <0x77>;
+        status = "okay";
+    };
+};
+
+/* ADXL345 on I2C3 with custom pinctrl */
+&i2c3 {
+    status = "okay";
+    pinctrl-0 = <&i2c3_scl_pb13 &i2c3_sda_pb14>;
+    pinctrl-names = "default";
+    clock-frequency = <100000>;
+    
+    adxl345@53 {
+        compatible = "adi,adxl345";
+        reg = <0x53>;
+        status = "okay";
+    };
+};
+
+/* Pinctrl definitions for I2C3 on STM32WL55JC1 */
+&pinctrl {
+    i2c3_scl_pb13: i2c3_scl_pb13 {
+        pinmux = <STM32_PINMUX('B', 13, AF4)>;
+        bias-pull-up;
+        drive-open-drain;
+    };
+    
+    i2c3_sda_pb14: i2c3_sda_pb14 {
+        pinmux = <STM32_PINMUX('B', 14, AF4)>;
+        bias-pull-up;
+        drive-open-drain;
+    };
+};
+
+/* 
+ * Flash partition layout for STM32WL55JC (256KB total flash)
+ * Must match the MCUboot overlay partition layout
+ * Layout: 36KB boot + 102KB slot0 + 102KB slot1 + 8KB storage + 8KB scratch = 256KB
+ */
+&flash0 {
+    /* Delete existing partitions node to avoid conflicts */
+    /delete-node/ partitions;
+    
+    partitions {
+        compatible = "fixed-partitions";
+        #address-cells = <1>;
+        #size-cells = <1>;
+
+        /* MCUboot bootloader - 30KB at base address */
+        boot_partition: partition@0 {
+            label = "mcuboot";
+            reg = <0x00000000 DT_SIZE_K(30)>;
+        };
+
+        /* Primary application slot (slot0) - 109KB */
+        slot0_partition: partition@7800 {
+            label = "image-0";
+            reg = <0x00007800 DT_SIZE_K(109)>;
+        };
+
+        /* Secondary application slot (slot1) - 109KB */
+        slot1_partition: partition@22C00 {
+            label = "image-1";
+            reg = <0x00022C00 DT_SIZE_K(109)>;
+        };
+
+        /* Storage for NVS (LoRaWAN settings) - 4KB */
+        storage_partition: partition@3E000 {
+            label = "storage";
+            reg = <0x0003E000 DT_SIZE_K(4)>;
+        };
+
+        /* Scratch area for image swapping - 4KB */
+        scratch_partition: partition@3F000 {
+            label = "image-scratch";
+            reg = <0x0003F000 DT_SIZE_K(4)>;
+        };
+    };
+};

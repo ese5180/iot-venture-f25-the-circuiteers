@@ -1,0 +1,57 @@
+/{
+    aliases{
+        mcuboot-button0 = &user_button_1;
+        mcuboot-led0 = &blue_led_1;
+    };
+    
+    chosen {
+        zephyr,code-partition = &boot_partition;
+    };
+};
+
+/* 
+ * Flash partition layout for STM32WL55JC (256KB total flash)
+ * MCUboot bootloader starts at 0x08000000 (flash base address)
+ * Layout: 30KB boot + 109KB slot0 + 109KB slot1 + 4KB storage + 4KB scratch = 256KB
+ */
+&flash0 {
+    /* Delete existing partitions node to avoid conflicts */
+    /delete-node/ partitions;
+    
+    partitions {
+        compatible = "fixed-partitions";
+        #address-cells = <1>;
+        #size-cells = <1>;
+
+        /* MCUboot bootloader - 30KB at base address */
+        boot_partition: partition@0 {
+            label = "mcuboot";
+            reg = <0x00000000 DT_SIZE_K(30)>;
+        };
+
+        /* Primary application slot (slot0) - 109KB */
+        slot0_partition: partition@7800 {
+            label = "image-0";
+            reg = <0x00007800 DT_SIZE_K(109)>;
+        };
+
+        /* Secondary application slot (slot1) - 109KB */
+        slot1_partition: partition@22C00 {
+            label = "image-1";
+            reg = <0x00022C00 DT_SIZE_K(109)>;
+        };
+
+        /* Storage for NVS (LoRaWAN settings) - 4KB */
+        storage_partition: partition@3E000 {
+            label = "storage";
+            reg = <0x0003E000 DT_SIZE_K(4)>;
+        };
+
+        /* Scratch area for image swapping - 4KB */
+        scratch_partition: partition@3F000 {
+            label = "image-scratch";
+            reg = <0x0003F000 DT_SIZE_K(4)>;
+        };
+    };
+};
+
