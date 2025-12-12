@@ -29,19 +29,12 @@
 
 LOG_MODULE_REGISTER(lorawan_fuota, CONFIG_LORAWAN_SERVICES_LOG_LEVEL);
 
-
-// nucleo -1
 /* Customize based on device configuration */
-// #define LORAWAN_DEV_EUI  { 0x70, 0xB3, 0xD5, 0x7E, 0xD0, 0x07, 0x3C, 0xC0 }
-// #define LORAWAN_JOIN_EUI { 0x00, 0x80, 0xE1, 0x15, 0x06, 0x1D, 0x9F, 0x39 }
-// #define LORAWAN_APP_KEY  { 0x3D, 0xBF, 0x23, 0xF7, 0x33, 0xA4, 0x89, 0x19, 0xA4, 0x5A, 0x7F, 0xC6, 0x49, 0xFC, 0x64, 0xE9 }
+#define LORAWAN_DEV_EUI  { 0x70, 0xB3, 0xD5, 0x7E, 0xD0, 0x07, 0x3C, 0xC0 }
+#define LORAWAN_JOIN_EUI { 0x00, 0x80, 0xE1, 0x15, 0x06, 0x1D, 0x9F, 0x39 }
+#define LORAWAN_APP_KEY  { 0x3D, 0xBF, 0x23, 0xF7, 0x33, 0xA4, 0x89, 0x19, 0xA4, 0x5A, 0x7F, 0xC6, 0x49, 0xFC, 0x64, 0xE9 }
 
-// nucleo -2
-#define LORAWAN_DEV_EUI  { 0x70, 0xB3, 0xD5, 0x7E, 0xD0, 0x07, 0x43, 0xCC }
-#define LORAWAN_JOIN_EUI { 0x00, 0x80, 0xE1, 0x15, 0x06, 0x1D, 0xA7, 0x0F }
-#define LORAWAN_APP_KEY  { 0xED, 0x5F, 0x2B, 0x36, 0x51, 0x6B, 0xC7, 0x8B, 0x65, 0xCA, 0x64, 0x4B, 0x3F, 0xAE, 0xE0, 0x9B }
-
-#define DELAY K_SECONDS(2)
+#define DELAY K_SECONDS(5)
 
 char data[] = {'d', 'a', 't', 'a', ' ', 's', 'e', 'n', 'd'};
 
@@ -200,46 +193,15 @@ static int pack_sensor_payload(struct sensor_q31_data *temp_data,
                                struct sensor_value accel[3],
                                uint8_t *payload)
 {
-<<<<<<< HEAD:fuota_with_sensor/src/main.c
     /* Convert Q31 sensor values to fixed-point x1000 without float */
     /* Q31 means value is scaled by 2^31. */
     /* We want (value / 2^31) * 1000 => (value * 1000) / 2^31 */
     /* Use int64_t to prevent overflow during multiplication */
-=======
-    
-    /* The raw sensor values are in Q31-like format with different shift values
-     * Analysis from debug data:
-     * temp_raw=800522, shift=16, Display: 24.43°C
-     *   → 800522/2^16 = 12.21, display shows 24.43 (exactly 2x!)
-     *   → So: actual_temp = temp_raw / 2^(shift-1)
-     * 
-     * hum_raw=39609, shift=21, Display: 38.68%
-     *   → 39609/2^21 = 0.01887, but display shows 38.68
-     *   → Factor needed: 38.68 / 0.01887 ≈ 2049 ≈ 2^11
-     *   → So: actual_hum = hum_raw * 2^11 / 2^21 = hum_raw / 2^10
-     * 
-     * press_raw=25964, shift=23, Display: 101.42 Pa (actually hPa?)
-     *   → 25964/2^23 = 0.00309, display shows 101.42
-     *   → Factor needed: 101.42 / 0.00309 ≈ 32817 ≈ 2^15
-     *   → So: actual_press = press_raw * 2^15 / 2^23 = press_raw / 2^8
-     */
-    
-    /* Get raw Q31 values */
-    int32_t temp_raw = temp_data->readings[0].temperature;
-    int32_t hum_raw = hum_data->readings[0].humidity;
-    int32_t press_raw = press_data->readings[0].pressure;
-    
-    /* Convert using the discovered relationships */
-    float temp_c = (float)temp_raw / (1LL << (temp_data->shift - 1));    // 2x larger scale
-    float humidity = (float)hum_raw / (1LL << (hum_data->shift - 11));   // Correct scale for %
-    float pressure = (float)press_raw / (1LL << (press_data->shift - 15)); // Correct scale for Pa
->>>>>>> ff6ee73 (save local changes):fuota_with_sensor_backup/src/main.c
     
     int16_t temp_x1000 = (int16_t)(((int64_t)temp_data->readings[0].temperature * 1000) / 2147483648LL);
     int16_t hum_x1000 = (int16_t)(((int64_t)hum_data->readings[0].humidity * 1000) / 2147483648LL);
     int16_t press_x1000 = (int16_t)(((int64_t)press_data->readings[0].pressure * 1000) / 2147483648LL);
 
-<<<<<<< HEAD:fuota_with_sensor/src/main.c
     /* Convert standard sensor values to fixed-point x1000 without float */
     /* sensor_value has val1 (int) and val2 (micro, /1,000,000) */
     /* val * 1000 = val1 * 1000 + val2 / 1000 */
@@ -247,31 +209,14 @@ static int pack_sensor_payload(struct sensor_q31_data *temp_data,
     int16_t accel_x_1000 = (int16_t)(accel[0].val1 * 1000 + accel[0].val2 / 1000);
     int16_t accel_y_1000 = (int16_t)(accel[1].val1 * 1000 + accel[1].val2 / 1000);
     int16_t accel_z_1000 = (int16_t)(accel[2].val1 * 1000 + accel[2].val2 / 1000);
-=======
-    /* Convert to fixed-point integers for transmission
-     * temp_c should be ~24.43 → temp_x100 = 2443
-     * humidity should be ~38.68 → hum_x100 = 3868
-     * pressure should be ~101.42 Pa → but typically we use hPa, so /100 first, then *10
-     *   or just multiply the Pa value by 10: 101.42*10 = 1014.2 → press_x10 = 1014
-     */
-    int16_t temp_x100 = (int16_t)(temp_c * 100);        // temp in °C * 100
-    uint16_t hum_x100 = (uint16_t)(humidity * 100);     // humidity in % * 100
-    uint16_t press_x10 = (uint16_t)(pressure * 10);     // pressure in Pa * 10
-    int16_t accel_x_1000 = (int16_t)(accel_x_f * 1000); // X acceleration * 1000
-    int16_t accel_y_1000 = (int16_t)(accel_y_f * 1000); // Y acceleration * 1000
-    int16_t accel_z_1000 = (int16_t)(accel_z_f * 1000); // Z acceleration * 1000
-
-    /* Debug log the packed values */
-    LOG_INF("DEBUG PACKED: temp_x100=%d, hum_x100=%u, press_x10=%u", temp_x100, hum_x100, press_x10);
->>>>>>> ff6ee73 (save local changes):fuota_with_sensor_backup/src/main.c
 
     /* Pack into binary payload (12 bytes) */
-    payload[0] = (uint8_t)(temp_x100 >> 8);
-    payload[1] = (uint8_t)(temp_x100 & 0xFF);
-    payload[2] = (uint8_t)(hum_x100 >> 8);
-    payload[3] = (uint8_t)(hum_x100 & 0xFF);
-    payload[4] = (uint8_t)(press_x10 >> 8);
-    payload[5] = (uint8_t)(press_x10 & 0xFF);
+    payload[0] = (uint8_t)(temp_x1000 >> 8);
+    payload[1] = (uint8_t)(temp_x1000 & 0xFF);
+    payload[2] = (uint8_t)(hum_x1000 >> 8);
+    payload[3] = (uint8_t)(hum_x1000 & 0xFF);
+    payload[4] = (uint8_t)(press_x1000 >> 8);
+    payload[5] = (uint8_t)(press_x1000 & 0xFF);
     payload[6] = (uint8_t)(accel_x_1000 >> 8);
     payload[7] = (uint8_t)(accel_x_1000 & 0xFF);
     payload[8] = (uint8_t)(accel_y_1000 >> 8);
@@ -423,14 +368,14 @@ int main(void)
                     accel[2].val1, accel[2].val2);
             
             LOG_INF("---");
-        	} else {
-            	if (rc_bme280 != 0) {
-                	LOG_ERR("BME280 read failed with code %d", rc_bme280);
-            	}
-            	if (rc_adxl345 != 0) {
-            	    LOG_ERR("ADXL345 read failed with code %d", rc_adxl345);
-            	}
-        	}
+        } else {
+            if (rc_bme280 != 0) {
+                LOG_ERR("BME280 read failed with code %d", rc_bme280);
+            }
+            if (rc_adxl345 != 0) {
+                LOG_ERR("ADXL345 read failed with code %d", rc_adxl345);
+            }
+        }
 
 			/* Pack and send sensor data if both readings were successful */
 			if (rc_bme280 == 0 && rc_adxl345 == 0) {
