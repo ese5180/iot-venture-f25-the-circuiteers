@@ -17,9 +17,9 @@ layout: default
 The vending machine industry represents a significant global market where maintenance costs can severely impact profitability. Traditional maintenance is often reactive and expensive. VendGuard aims to reduce these costs by up to 25% through real-time health monitoring and predictive analytics.
 
 ### Key Features
-*   **Edge Device:** Battery-backed sensor node (STM32WL55JC) monitoring temperature and vibration.
+*   **Edge Device:** Battery-backed sensor node (STM32WL55JC) monitoring temperature, humidity, pressure and vibration.
 *   **LoRaWAN Connectivity:** Long-range, low-power communication for distributed fleets.
-*   **Cloud Platform:** Centralized dashboard for real-time status and alerts.
+*   **Cloud Platform:** Centralized dashboard for real-time status and alerts using AWS IoT.
 *   **Secure:** End-to-end security with signed firmware updates (FUOTA) and secure boot.
 
 ---
@@ -64,13 +64,11 @@ The vending machine industry represents a significant global market where mainte
 > `![Device Photo 1](images/placeholder_device.jpg)`
 
 ### Project Image (3.14.7)
-*An exactly 400x400 pixel .jpg image that captures your project.*
 
-> **TODO:** Add your 400x400 image here.
->
-> `![Project Icon](images/project_icon_400x400.jpg)`
+![Project Icon](images/project_icon_400x400.png)
 
 ### Video Demo (3.14.8)
+
 *A <=5 minute video demonstrating the product.*
 
 > **TODO:** Add a link or embed your video here.
@@ -97,12 +95,8 @@ Our system implements a secure dual-slot bootloading architecture using MCUboot.
 
 ---
 
-## Source Code (3.14.9)
+## Source Code
 
 The complete source code for our firmware and software is available in our GitHub repository:
 
 [**View Source Code on GitHub**](https://github.com/ese5180/iot-venture-f25-the-circuiteers)
-
----
-
-*This report was generated for the ESE5180 Final Project.*
