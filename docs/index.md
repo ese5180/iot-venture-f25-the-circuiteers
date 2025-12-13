@@ -6,7 +6,8 @@ layout: default
 
 **Team:** The Circuiteers  
 **Members:** Kevin Wang, Shun Yao, Zheyu Li, Megha Mistry  
-**Course:** ESE5180: IoT Wireless, Security, & Scaling (Fall 2025)
+**Course:** ESE5180: IoT Wireless, Security, & Scaling (Fall 2025)\
+**GitHub Page Link:** https://ese5180.github.io/iot-venture-f25-the-circuiteers
 
 ![alt text](images/VendGuard.png)
 
