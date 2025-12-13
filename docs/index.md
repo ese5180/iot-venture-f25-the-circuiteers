@@ -2,7 +2,7 @@
 layout: default
 ---
 
-# VendGuard: Smart Health Monitoring for Vending Machines
+# VendGuard Report Website
 
 **Team:** The Circuiteers  
 **Members:** Kevin Wang, Shun Yao, Zheyu Li, Megha Mistry  
@@ -200,8 +200,6 @@ This approach enables more sophisticated fault pattern recognition and improves 
 ## Media & Demonstration
 
 ### Final Product Hardware
-
-<h3>Final Product Hardware</h3>
 
 <div style="display: flex; gap: 16px; margin-bottom: 16px;">
   <img src="images/placeholder_device1.jpg" width="48%">
