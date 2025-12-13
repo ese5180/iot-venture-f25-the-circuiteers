@@ -218,25 +218,7 @@ This approach enables more sophisticated fault pattern recognition and improves 
 
 ### Video Demo
 
-<a href="https://drive.google.com/file/d/1jf6dwQ8yoLkoeFRiJwk9ERi-GmraxTsv/view" target="_blank" style="position: relative; display: inline-block; max-width: 720px;">
-  <img src="images/demo_thumbnail.png" alt="VendGuard Demo Video" style="width: 100%; display: block; border-radius: 12px;">
-  <span style="
-    position: absolute; top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    width: 84px; height: 84px;
-    background: rgba(0,0,0,0.55);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-  ">
-    <span style="
-      width: 0; height: 0;
-      border-left: 28px solid white;
-      border-top: 18px solid transparent;
-      border-bottom: 18px solid transparent;
-      margin-left: 6px;
-    "></span>
-  </span>
-</a>
+[![VendGuard Demo Video](images/demo_thumbnail.jpg)](https://drive.google.com/file/d/1jf6dwQ8yoLkoeFRiJwk9ERi-GmraxTsv/view)
 
 ---
 
