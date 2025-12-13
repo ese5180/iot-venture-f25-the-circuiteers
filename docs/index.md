@@ -199,11 +199,7 @@ This approach enables more sophisticated fault pattern recognition and improves 
 
 ## Media & Demonstration
 
-<<<<<<< HEAD
-<h3>Final Product Hardware</h3>
-=======
 ### Final Product Hardware
->>>>>>> b212ccc38d27992748a8425595f62fdb51040bb0
 
 <div style="display: flex; gap: 16px; margin-bottom: 16px;">
   <img src="images/placeholder_device1.jpg" width="48%">
@@ -222,7 +218,7 @@ This approach enables more sophisticated fault pattern recognition and improves 
 
 ### Video Demo
 
-![Watch our Demo Video](https://drive.google.com/file/d/1jf6dwQ8yoLkoeFRiJwk9ERi-GmraxTsv/view?usp=sharing)
+[![VendGuard Demo Video](images/demo_thumbnail.jpg)](https://drive.google.com/file/d/1jf6dwQ8yoLkoeFRiJwk9ERi-GmraxTsv/view)
 
 ---
 
