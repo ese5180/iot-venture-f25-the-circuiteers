@@ -199,8 +199,6 @@ This approach enables more sophisticated fault pattern recognition and improves 
 
 ## Media & Demonstration
 
-### Final Product Hardware
-
 <h3>Final Product Hardware</h3>
 
 <div style="display: flex; gap: 16px; margin-bottom: 16px;">
@@ -220,7 +218,7 @@ This approach enables more sophisticated fault pattern recognition and improves 
 
 ### Video Demo
 
-![Watch our Demo Video](YOUR_VIDEO_LINK_HERE)
+![Watch our Demo Video](https://drive.google.com/file/d/1jf6dwQ8yoLkoeFRiJwk9ERi-GmraxTsv/view?usp=sharing)
 
 ---
 
