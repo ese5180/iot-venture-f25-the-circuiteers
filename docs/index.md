@@ -29,7 +29,7 @@ The vending machine industry represents a significant global market where mainte
 
 ## Final Report
 
-### 1. Successes (3.14.2)
+### 1. Successes
 
 We successfully implemented a complete end-to-end IoT data pipeline and secure over-the-air firmware update mechanism. Three key achievements stand out:
 
@@ -76,7 +76,7 @@ This real-world validation confirms the system's practical viability and the cor
 
 ---
 
-### 2. Challenges & Failures (3.14.3)
+### 2. Challenges & Failures
 
 Several technical and design challenges emerged during the development cycle that warrant further investigation and optimization:
 
@@ -120,7 +120,7 @@ The MCU's limited on-chip flash memory restricts the size of firmware updates th
 
 ---
 
-### 3. Retrospective (3.14.4)
+### 3. Retrospective
 
 The FUOTA implementation emerged as the most time-intensive and architecturally complex component of the project. Several development strategies could have improved efficiency:
 
@@ -147,7 +147,7 @@ The FUOTA implementation emerged as the most time-intensive and architecturally 
 
 ---
 
-### 4. System Design Changes (3.14.5)
+### 4. System Design Changes
 
 Several design modifications would be considered for a production iteration based on operational experience and market feedback:
 
@@ -199,25 +199,28 @@ This approach enables more sophisticated fault pattern recognition and improves 
 
 ## Media & Demonstration
 
-### Final Product Hardware (3.14.6)
+### Final Product Hardware
 
-*Images of your final product hardware implementation.*
+<h3>Final Product Hardware</h3>
 
-> **TODO:** Add photos of your device here. Ideally, take photos in a realistic environment (e.g., inside or attached to a vending machine) or use the light box in the Detkin Lab.
->
-> `![Device Photo 1](images/placeholder_device.jpg)`
+<div style="display: flex; gap: 16px; margin-bottom: 16px;">
+  <img src="images/placeholder_device1.jpg" width="48%">
+  <img src="images/placeholder_device2.jpg" width="48%">
+</div>
 
-### Project Image (3.14.7)
+<div style="display: flex; gap: 16px;">
+  <img src="images/placeholder_device3.jpg" width="48%">
+  <img src="images/placeholder_device4.jpg" width="48%">
+</div>
+
+
+### Project Image
 
 ![Project Icon](images/project_icon_400x400.png)
 
-### Video Demo (3.14.8)
+### Video Demo
 
-*A <=5 minute video demonstrating the product.*
-
-> **TODO:** Add a link or embed your video here.
->
-> [Watch our Demo Video](YOUR_VIDEO_LINK_HERE)
+![Watch our Demo Video](YOUR_VIDEO_LINK_HERE)
 
 ---
 
