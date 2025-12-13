@@ -8,6 +8,8 @@ layout: default
 **Members:** Kevin Wang, Shun Yao, Zheyu Li, Megha Mistry  
 **Course:** ESE5180: IoT Wireless, Security, & Scaling (Fall 2025)
 
+![alt text](images/VendGuard.png)
+
 ---
 
 ## Project Overview
@@ -218,6 +220,8 @@ This approach enables more sophisticated fault pattern recognition and improves 
 ### Communication Architecture
 
 ![Communication Architecture](images/Communication_diagram.png)
+
+![alt text](images/Communication_system.png)
 
 ### Firmware & Security
 
