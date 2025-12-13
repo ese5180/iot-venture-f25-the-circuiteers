@@ -6,4 +6,5 @@ description: Smart Health Monitoring System for Vending Machines
 plugins:
 - jekyll-remote-theme # add this line to the plugins list if you already have one
 
-# show_downloads: false
+# footer: "VendGuard maintained by The Circuiteers"
+
