@@ -29,28 +29,53 @@ The vending machine industry represents a significant global market where mainte
 ### 1. Successes (3.14.2)
 *What parts of your project would you consider a success? Why?*
 
-> **TODO:** Replace this text with your reflection.
-> Example: We successfully implemented the LoRaWAN FUOTA update mechanism, which was a complex integration of MCUboot and the LoRa stack. This allows us to update devices remotely without physical access, a critical feature for scalable IoT deployments.
+> We successfully implemented a complete end-to-end IoT data pipeline and secure over-the-air firmware update mechanism:
+>
+> **Complete Data Flow Architecture:** We established a robust data acquisition and transmission pipeline spanning from edge sensor nodes to cloud infrastructure. The system seamlessly integrates sensor data collection at the MCU level, LoRaWAN transmission through gateway infrastructure, AWS cloud processing, and real-time alert delivery to mobile endpoints. This demonstrates successful system integration across heterogeneous platforms.
+>
+> **Secure Firmware Update Over The Air (FUOTA):** We implemented a production-grade FUOTA mechanism leveraging LoRaWAN as the transport layer with MCUboot as the secure bootloader. Despite the inherent bandwidth constraints of LoRaWAN and packet loss during transmission, the system reliably delivers and verifies new firmware images using ECDSA P-256 signatures, enabling secure device updates without physical access—a critical capability for large-scale IoT deployments.
+>
+> **Robust Hardware Enclosure Design:** The device enclosure was engineered to provide secure sensor mounting while maintaining optimal sensor exposure within the vending machine environment. The design ensures mechanical reliability during transit and operation while preserving measurement accuracy for temperature and vibration sensors.
 
 ### 2. Challenges & Failures (3.14.3)
-*What parts of your project didn’t go well? Why?*
+*What parts of your project didn't go well? Why?*
 
-> **TODO:** Replace this text with your reflection.
-> Example: We struggled with the initial power budget for the vibration sensor, which consumed more current than expected in idle mode. This required us to implement a more aggressive sleep cycle, which complicated the interrupt handling logic.
+> Several technical and design challenges emerged during the development cycle that warrant further investigation and optimization:
+>
+> **Power Budget Constraints:** The current device's power consumption profile has not been fully validated in extended field deployments. Initial calculations suggest a battery lifetime of 5-6 months under typical usage patterns, which may be insufficient for certain deployment scenarios where annual battery replacement is preferred. This necessitates further optimization of the power consumption profile.
+>
+> **Limited Power Management Implementation:** The current firmware lacks comprehensive sleep state management for periodic sensor operations. Implementing event-driven sensor activation and dynamic sleep cycles could significantly reduce overall power consumption and extend operational lifetime. The MCU remains in active mode for extended periods that could be optimized through intelligent scheduling.
+>
+> **Cloud Data Processing Limitations:** The current AWS data pipeline implements threshold-based alerting for anomaly detection. To provide more actionable insights and improve predictive maintenance capabilities, the system could benefit from machine learning models capable of detecting subtle failure patterns and predicting component degradation before critical failures occur.
+>
+> **Firmware Image Size Constraints:** The MCU's limited on-chip flash memory restricts the size of firmware updates that can be transmitted over FUOTA. Migration to a device with increased flash capacity would enable more feature-rich firmware updates and reduce deployment complexity.
+
 
 ### 3. Retrospective (3.14.4)
 *If you had to do it again, how might you change your development approach given the finite time and money resources?*
 
-> **TODO:** Replace this text with your reflection.
-> Example: If we were to start over, we would simulate the network latency earlier in the process. We spent a lot of time debugging timeout issues on the hardware that could have been identified with a better simulation model.
+> The FUOTA implementation emerged as the most time-intensive and architecturally complex component of the project. In retrospect, several development strategies could have improved efficiency:
+>
+> **Earlier Network Simulation:** We would have prioritized the development of a simulation framework for LoRaWAN packet transmission and loss scenarios before hardware implementation. This would have enabled earlier identification of timeout behavior, packet fragmentation challenges, and retransmission logic that required extensive debugging on physical hardware.
+>
+> **Incremental Integration Testing:** Rather than treating FUOTA as a monolithic integration task, decomposing the LoRa stack integration into smaller, independently testable components earlier in the cycle would have accelerated troubleshooting and reduced critical path delays.
+>
+> **Hardware Selection Evaluation:** Conducting a more rigorous evaluation of MCU alternatives with larger flash memory and better power management capabilities during the initial design phase could have eliminated several late-stage constraints that emerged during development.
+
 
 ### 4. System Design Changes (3.14.5)
 *Would you change your system design after this development cycle?*
 
-> **TODO:** Replace this text with your reflection. Consider:
-> *   Was LoRaWAN the right choice?
-> *   Would other sensors work better?
-> *   Did the target market feedback suggest changes?
+> Several design modifications would be considered for a production iteration based on operational experience and market feedback:
+>
+> **Communication Protocol Evaluation:** While LoRaWAN provided excellent range characteristics and power efficiency for remote deployments, cellular connectivity (NB-IoT or LTE-M) could offer superior bandwidth and lower latency for FUOTA operations if power can be sourced directly from the vending machine infrastructure. This trade-off should be evaluated based on specific deployment scenarios and machine capability.
+>
+> **Supply Chain and Integration Strategy:** The current design operates as a third-party retrofit solution, which introduces integration constraints and duplicative subsystems (independent power management, mechanical mounting). Strategic partnerships with vending machine manufacturers would enable deeper integration, larger sensor placement flexibility, and leveraging of existing power infrastructure—potentially reducing both cost and complexity.
+>
+> **Sensor Placement Optimization:** The current vibration sensor placement provides good overall machine health monitoring. However, positioning the sensor in closer proximity to high-frequency mechanical systems (compressor, dispensing motors) could improve early fault detection sensitivity and reduce false positive alerts from ambient vibrations.
+>
+> **Multi-Sensor Fusion:** Integration of additional sensing modalities (acoustic analysis, power draw signatures) alongside temperature and vibration could enable more sophisticated fault pattern recognition and improve the precision of predictive analytics.
+
 
 ---
 
