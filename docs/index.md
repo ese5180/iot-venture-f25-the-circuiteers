@@ -218,7 +218,9 @@ This approach enables more sophisticated fault pattern recognition and improves 
 
 ### Video Demo
 
-[![VendGuard Demo Video](images/demo_thumbnail.jpg)](https://drive.google.com/file/d/1jf6dwQ8yoLkoeFRiJwk9ERi-GmraxTsv/view)
+Click to watch our video demo:
+
+[![VendGuard Demo Video](images/demo_thumbnail.png)](https://drive.google.com/file/d/1jf6dwQ8yoLkoeFRiJwk9ERi-GmraxTsv/view)
 
 ---
 
